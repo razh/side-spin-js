@@ -14,6 +14,9 @@ var _game;
 function init() {
   _game = new Game();
 
+  _game._canvas.addEventListener( 'mousedown', onMouseDown, null );
+  document.addEventListener( 'keydown', onKeyDown, null );
+
   loop();
 }
 
