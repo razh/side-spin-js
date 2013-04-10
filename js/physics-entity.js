@@ -4,14 +4,14 @@ function PhysicsEntity() {
   this._radialVelocity = 0.0;
   this._radialAcceleration = 0.0;
 
-  this._maxRadialVelocity = 0.0;
-  this._maxRadialAcceleration = 0.0;
+  this._maxRadialVelocity = Number.POSITIVE_INFINITY;
+  this._maxRadialAcceleration = Number.POSITIVE_INFINITY;
 
-  this._angularVelocity = 0;
-  this._angularAcceleration = 0;
+  this._angularVelocity = 0.0;
+  this._angularAcceleration = 0.0;
 
-  this._maxAngularVelocity = 0;
-  this._maxAngularAcceleration = 0;
+  this._maxAngularVelocity = Number.POSITIVE_INFINITY;
+  this._maxAngularAcceleration = Number.POSITIVE_INFINITY;
 }
 
 PhysicsEntity.prototype = new Entity();
@@ -34,7 +34,7 @@ PhysicsEntity.prototype.update = function( elapsedTime ) {
 
 // Radial velocity.
 PhysicsEntity.prototype.getRadialVelocity = function() {
-  return this.radialVelocity;
+  return this._radialVelocity;
 };
 
 PhysicsEntity.prototype.setRadialVelocity = function( radialVelocity ) {

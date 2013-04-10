@@ -5,11 +5,14 @@
 function World() {
   Object2D.call( this );
 
-  this._outerEntity = new Entity();
-  this._innerEntity = new Entity();
+  this._outerEntity = new PhysicsEntity();
+  this._innerEntity = new PhysicsEntity();
 
-  this._outerRadius = 250;
-  this._innerRadius = 125;
+  this._outerEntity.setAngularVelocity( 10 * Math.PI / 180 );
+  this._innerEntity.setAngularVelocity( -10 * Math.PI / 180 );
+
+  this._outerRadius = 256.0;
+  this._innerRadius = 128.0;
 
   this._backgroundColor = new Color( 127, 127, 127, 1.0 );
 
@@ -89,11 +92,13 @@ World.prototype.setBackgroundColor = function() {
 function WorldBuilder() {
   this._count = 32;
 
-  this._outerRadius  = 250.0;
-  this._innerRadius  = 125.0;
+  this._outerRadius  = 256.0;
+  this._innerRadius  = 128.0;
 
-  this._outerLength = 25.0;
-  this._innerLength = 25.0;
+  this._outerLength = 24.0;
+  this._innerLength = 24.0;
+
+  this._arcColor = new Color();
 }
 
 WorldBuilder.prototype.create = function() {
@@ -113,14 +118,16 @@ WorldBuilder.prototype.create = function() {
     arc = new Arc().setDistance( this._outerRadius )
                    .setStartAngle( startAngle )
                    .setEndAngle( startAngle + angle )
-                   .setLength( -this._outerLength * Math.random() ); // Negative, towards center.
+                   .setLength( -this._outerLength * Math.random() )
+                   .setColor( this._arcColor ); // Negative, towards center.
     outerEntity.addObject( arc );
 
     // Create inner arc.
     arc = new Arc().setDistance( this._innerRadius )
                    .setStartAngle( startAngle )
                    .setEndAngle( startAngle + angle )
-                   .setLength( this._innerLength * Math.random() );
+                   .setLength( this._innerLength * Math.random() )
+                   .setColor( this._arcColor );
     innerEntity.addObject( arc );
 
     // Rotate.
@@ -152,5 +159,10 @@ WorldBuilder.prototype.setOuterLength = function( outerLength ) {
 
 WorldBuilder.prototype.setInnerLength = function( innerLength ) {
   this._innerLength = innerLength;
+  return this;
+};
+
+WorldBuilder.prototype.setArcColor = function() {
+  this._arcColor.set.apply( this._arcColor, arguments );
   return this;
 };

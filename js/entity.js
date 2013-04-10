@@ -19,12 +19,16 @@ Entity.prototype.draw = function( ctx ) {
   ctx.translate( this.getX(), this.getY() );
   ctx.rotate( this.getAngle() );
 
+  this.drawObjects( ctx );
+
+  ctx.restore();
+};
+
+Entity.prototype.drawObjects = function( ctx ) {
   var objects = this.getObjects();
   for ( var i = 0, n = objects.length; i < n; i++ ) {
     objects[i].draw( ctx );
   }
-
-  ctx.restore();
 };
 
 Entity.prototype.getObjects = function() {

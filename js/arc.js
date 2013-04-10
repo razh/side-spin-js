@@ -11,14 +11,20 @@ Arc.prototype = new Object2D();
 Arc.prototype.constructor = Arc;
 
 Arc.prototype.draw = function( ctx ) {
+  if ( !this.isVisible() ) {
+    return;
+  }
+
   var angle = this.getAngle(),
-      distance = this.getDistance(),
       // Middle of arc line.
-      radius = 0.5 * this._length + distance;
+      radius = 0.5 * this._length + this.getDistance();
 
   ctx.beginPath();
-  ctx.arc( 0, 0, radius, this._startAngle + angle, this._endAngle + angle );
-  ctx.closePath();
+  ctx.arc( this.getX(),
+           this.getY(),
+           radius,
+           this._startAngle + angle,
+           this._endAngle + angle );
 
   ctx.strokeStyle = this.getColor().toString();
   ctx.lineWidth = Math.abs( this._length );
