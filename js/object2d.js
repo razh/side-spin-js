@@ -4,14 +4,16 @@ function Object2D() {
     y: 0.0
   };
 
-  this._width = 1.0;
-  this._height = 1.0;
-  this._rotation = 0.0;
+  this._angle    = 0.0;
+  this._distance = 0.0;
 
-  this._visible = true;
+  this._color = new Color( 255, 255, 255, 1.0 );
+
+  this._visible   = true;
   this._colliding = true;
 }
 
+// Position.
 Object2D.prototype.getX = function() {
   return this.getPosition().x;
 };
@@ -68,60 +70,47 @@ Object2D.prototype.translate = function() {
   return this;
 };
 
-// Dimensions.
-Object2D.prototype.getWidth = function() {
-  return this._width;
+// Angle.
+Object2D.prototype.getAngle = function() {
+  return this._angle;
 };
 
-Object2D.prototype.setWidth = function( width ) {
-  this._width = width;
-  return this;
-};
-
-Object2D.prototype.getHeight = function() {
-  return this._height;
-};
-
-Object2D.prototype.setHeight = function( height ) {
-  this._height = height;
-  return this;
-};
-
-Object2D.prototype.scale = function() {
-  if ( arguments.length === 1 ) {
-    this.setWidth( this.getWidth() * arguments[0] );
-    this.setHeight( this.getHeight() * arguments[0] );
-  } else if ( arguments.length === 2 ) {
-    this.setWidth( this.getWidth() * arguments[0] );
-    this.setHeight( this.getHeight() * arguments[1] );
-  }
-
-  return this;
-};
-
-Object2D.prototype.getRotation = function() {
-  return this._rotation;
-};
-
-Object2D.prototype.setRotation = function( rotation ) {
-  this._rotation = rotation;
+Object2D.prototype.setAngle = function( angle ) {
+  this._angle = angle % 360;
   return this;
 };
 
 Object2D.prototype.rotate = function( angle ) {
-  this._rotation += angle;
+  this.setAngle( this.getAngle() + angle );
   return this;
 };
 
-Object2D.prototype.getRotationInDegrees = function() {
-  return this._rotation * 180 / Math.PI;
+// Distance.
+Object2D.prototype.getDistance = function() {
+  return this._distance;
 };
 
-Object2D.prototype.setRotationInDegrees = function( rotation ) {
-  this._rotation = rotation * Math.PI / 180;
+Object2D.prototype.setDistance = function( distance ) {
+  this._distance = distance;
   return this;
 };
 
+Object2D.prototype.radialTranslate = function( radialTranslate ) {
+  this.setDistance( this.getDistance() + radialTranslate );
+  return this;
+};
+
+// Color.
+Object2D.prototype.getColor = function() {
+  return this._color;
+};
+
+Object2D.prototype.setColor = function() {
+  this.getColor().set.apply( this.getColor(), arguments );
+  return this;
+};
+
+// Visibility.
 Object2D.prototype.isVisible = function() {
   return this._visible;
 };
@@ -130,6 +119,7 @@ Object2D.prototype.setVisible = function( visible ) {
   this._visible = visible;
 };
 
+// Collision.
 Object2D.prototype.isColliding = function() {
   return this._colliding;
 };
@@ -138,90 +128,14 @@ Object2D.prototype.setColliding = function( colliding ) {
   this._colliding = colliding;
 };
 
-// Coordinate transforms.
-Object2D.prototype.worldToLocalCoordinates = function() {
-  var x, y;
-  if ( arguments.length === 1 ) {
-    x = arguments[0].x;
-    y = arguments[0].y;
-  } else if ( arguments.length === 2 ) {
-    x = arguments[0];
-    y = arguments[1];
-  }
-
-  // Translate.
-  x -= this.getX();
-  y -= this.getY();
-
-  // Rotate.
-  var rotation = -this.getRotation();
-  if ( rotation !== 0 ) {
-    var cos = Math.cos( rotation ),
-        sin = Math.sin( rotation );
-
-    var rx = cos * x - sin * y,
-        ry = sin * x + cos * y;
-
-    x = rx;
-    y = ry;
-  }
-
-  // Scale.
-  x /= this.getWidth();
-  y /= this.getHeight();
-
-  return {
-    x: x,
-    y: y
-  };
-};
-
-Object2D.prototype.localToWorldCoordinates = function() {
-  var x, y;
-  if ( arguments.length === 1 ) {
-    x = arguments[0].x;
-    y = arguments[0].y;
-  } else if ( arguments.length === 2 ) {
-    x = arguments[0];
-    y = arguments[1];
-  }
-
-  // Scale.
-  x *= this.getWidth();
-  y *= this.getHeight();
-
-  // Rotate.
-  var rotation = this.getRotation();
-  if ( rotation !== 0 ) {
-    var cos = Math.cos( rotation ),
-        sin = Math.sin( rotation );
-
-    var rx = cos * x - sin * y,
-        ry = sin * x + cos * y;
-
-    x = rx;
-    y = ry;
-  }
-
-  // Translate.
-  x += this.getX();
-  y += this.getY();
-
-  return {
-    x: x,
-    y: y
-  };
-};
-
 // JSON.
 Object2D.prototype.fromJSON = function( json ) {
   var jsonObject = JSON.parse( json );
 
   return this.setX( jsonObject.x || 0 )
              .setY( jsonObject.y || 0 )
-             .setWidth( jsonObject.width || 1 )
-             .setHeight( jsonObject.height || 1 )
-             .setRotationInDegrees( jsonObject.rotation || 0 );
+             .setAngle( jsonObject.angle || 0 )
+             .setDistance( jsonObject.distance || 0 );
 };
 
 Object2D.prototype.toJSON = function() {
@@ -229,11 +143,9 @@ Object2D.prototype.toJSON = function() {
 
   object.x = this.getX();
   object.y = this.getY();
-  object.width = this.getWidth();
-  object.height = this.getHeight();
 
-  // Round rotation in increments of 0.01 degrees.
-  object.rotation = parseFloat( this.getRotationInDegrees().toFixed(2) );
+  object.angle    = this.getAngle();
+  object.distance = this.getDistance();
 
   return object;
 };

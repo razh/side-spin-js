@@ -1,27 +1,12 @@
-function WorldSegment() {
-  Object2D.call( this );
-
-  this._startAngle = 0;
-  this._endAngle = 0;
-
-  this._length = 0;
-}
-
-WorldSegment.prototype = new Object2D();
-WorldSegment.prototype.constructor = WorldSegment;
-
-WorldSegment.prototype.draw = function( ctx ) {
-
-};
-
 // World
 // -----
-// A world is made up of segments.
+// A world is made up of two entities (outer and inner) which
+// are composed of arcs.
 function World() {
   Object2D.call( this );
 
-  this._outerSegments = [];
-  this._innerSegments = [];
+  this._outerEntity = new Entity();
+  this._innerEntity = new Entity();
 
   this._outerRadius = 100;
   this._innerRadius = 75;
@@ -42,6 +27,22 @@ World.prototype.draw = function( ctx ) {
   ctx.fill();
 
   ctx.globalCompositeOperation = 'source-over';
+};
+
+World.prototype.getOuterEntity = function() {
+  return this._outerEntity;
+};
+
+World.prototype.addOuterShape = function( shape ) {
+  this._outerEntity.addShape( shape );
+};
+
+World.prototype.getInnerEntity = function() {
+  return this._innerEntity;
+};
+
+World.prototype.addInnerShape = function( shape ) {
+  this._innerEntity
 };
 
 

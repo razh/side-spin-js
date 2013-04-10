@@ -1,4 +1,12 @@
-function onMouseDown( event ) {}
+function onMouseDown( event ) {
+  var input = transformCoords( event.pageX, event.pageY );
+
+  if ( input.x < 0.5 * _game.WIDTH ) {
+    console.log( 'left' );
+  } else {
+    console.log( 'right' );
+  }
+}
 
 function onKeyDown( event ) {
   switch( event.which ) {

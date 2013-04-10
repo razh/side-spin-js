@@ -1,18 +1,11 @@
 function PhysicsEntity() {
   Entity.call( this );
 
-  this._velocity = {
-    x: 0,
-    y: 0
-  };
+  this._radialVelocity = 0.0;
+  this._radialAcceleration = 0.0;
 
-  this._acceleration = {
-    x: 0,
-    y: 0
-  };
-
-  this._maxSpeed = 0;
-  this._maxAcceleration = 0;
+  this._maxRadialVelocity = 0.0;
+  this._maxRadialAcceleration = 0.0;
 
   this._angularVelocity = 0;
   this._angularAcceleration = 0;
@@ -30,126 +23,65 @@ PhysicsEntity.prototype.update = function( elapsedTime ) {
   // Convert from milliseconds to seconds.
   elapsedTime *= 1e-3;
 
-  // Handle translation.
-  this.accelerate( this.getAccelerationX() * elapsedTime,
-                   this.getAccelerationY() * elapsedTime );
-  this.translate( this.getVelocityX() * elapsedTime,
-                  this.getVelocityY() * elapsedTime );
+  // Handle radial translation.
+  this.radialAccelerate( this.getRadialAcceleration() * elapsedTime );
+  this.radialTranslate( this.getRadialVelocity() * elapsedTime );
 
   // Handle rotation.
   this.angularAccelerate( this.getAngularAcceleration() * elapsedTime );
   this.rotate( this.getAngularVelocity() * elapsedTime );
 };
 
-// Velocity.
-PhysicsEntity.prototype.getVelocityX = function() {
-  return this.getVelocity().x;
+// Radial velocity.
+PhysicsEntity.prototype.getRadialVelocity = function() {
+  return this.radialVelocity;
 };
 
-PhysicsEntity.prototype.setVelocityX = function( velocityX ) {
-  this._velocity.x = velocityX;
-  return this;
-};
+PhysicsEntity.prototype.setRadialVelocity = function( radialVelocity ) {
+  var maxRadialVelocity = this.getMaxRadialVelocity();
 
-PhysicsEntity.prototype.getVelocityY = function() {
-  return this.getVelocity().y;
-};
-
-PhysicsEntity.prototype.setVelocityY = function( velocityY ) {
-  this._velocity.y = velocityY;
-  return this;
-};
-
-PhysicsEntity.prototype.getVelocity = function() {
-  return this._velocity;
-};
-
-PhysicsEntity.prototype.setVelocity = function() {
-  if ( arguments.length === 1 ) {
-    this.setVelocityX( arguments[0].x );
-    this.setVelocityY( arguments[0].y );
-  } else if ( arguments.length === 2 ) {
-    this.setVelocityX( arguments[0] );
-    this.setVelocityY( arguments[1] );
-  }
-
+  this._radialVelocity = clamp( radialVelocity,
+                               -maxRadialVelocity,
+                                maxRadialVelocity );
   return this;
 };
 
 // Acceleration.
-PhysicsEntity.prototype.getAccelerationX = function() {
-  return this.getAcceleration().x;
+PhysicsEntity.prototype.getRadialAcceleration = function() {
+  return this._radialAcceleration;
 };
 
-PhysicsEntity.prototype.setAccelerationX = function( accelerationX ) {
-  this._acceleration.x = accelerationX;
+PhysicsEntity.prototype.setRadialAcceleration = function( radialAcceleration ) {
+  var maxRadialAcceleration = this.getMaxRadialAcceleration();
+
+  this._radialAcceleration = clamp( radialAcceleration,
+                                   -maxRadialAcceleration,
+                                    maxRadialAcceleration );
   return this;
 };
 
-PhysicsEntity.prototype.getAccelerationY = function() {
-  return this.getAcceleration().y;
-};
-
-PhysicsEntity.prototype.setAccelerationY = function( accelerationY ) {
-  this._acceleration.y = accelerationY;
-  return this;
-};
-
-PhysicsEntity.prototype.getAcceleration = function() {
-  return this._acceleration;
-};
-
-PhysicsEntity.prototype.setAcceleration = function() {
-  if ( arguments.length === 1 ) {
-    this.setAccelerationX( arguments[0].x );
-    this.setAccelerationY( arguments[0].y );
-  } else if ( arguments.length === 2 ) {
-    this.setAccelerationX( arguments[0] );
-    this.setAccelerationY( arguments[1] );
-  }
-
-  return this;
-};
-
-PhysicsEntity.prototype.accelerateX = function( accelerateX ) {
-  this.setVelocityX( this.getVelocityX() + accelerateX );
-  return this;
-};
-
-PhysicsEntity.prototype.accelerateY = function( accelerateY ) {
-  this.setVelocityY( this.getVelocityY() + accelerateY );
-  return this;
-};
-
-PhysicsEntity.prototype.accelerate = function() {
-  if ( arguments.length === 1 ) {
-    this.accelerateX( arguments[0].x );
-    this.accelerateY( arguments[0].y );
-  } else if ( arguments.length === 2) {
-    this.accelerateX( arguments[0] );
-    this.accelerateY( arguments[1] );
-  }
-
+PhysicsEntity.prototype.radialAccelerate = function( radialAcceleration ) {
+  this.setRadialVelocity( this.getRadialVelocity() + radialAcceleration );
   return this;
 };
 
 // Max speed.
-PhysicsEntity.prototype.getMaxSpeed = function() {
-  return this._maxSpeed;
+PhysicsEntity.prototype.getMaxRadialVelocity = function() {
+  return this._maxRadialVelocity;
 };
 
-PhysicsEntity.prototype.setMaxSpeed = function( maxSpeed ) {
-  this._maxSpeed = maxSpeed;
+PhysicsEntity.prototype.setMaxRadialVelocity = function( maxRadialVelocity ) {
+  this._maxRadialVelocity = maxRadialVelocity;
   return this;
 };
 
 // Max acceleration.
-PhysicsEntity.prototype.getMaxAcceleration = function() {
-  return this._maxAcceleration;
+PhysicsEntity.prototype.getMaxRadialAcceleration = function() {
+  return this._maxRadialAcceleration;
 };
 
-PhysicsEntity.prototype.setMaxAcceleration = function( maxAcceleration ) {
-  this._maxAcceleration = maxAcceleration;
+PhysicsEntity.prototype.setMaxRadialAcceleration = function( maxRadialAcceleration ) {
+  this._maxRadialAcceleration = maxRadialAcceleration;
   return this;
 };
 
@@ -161,13 +93,9 @@ PhysicsEntity.prototype.getAngularVelocity = function() {
 PhysicsEntity.prototype.setAngularVelocity = function( angularVelocity ) {
   var maxAngularVelocity = this.getMaxAngularVelocity();
 
-  if ( angularVelocity > maxAngularVelocity ) {
-    angularVelocity = maxAngularVelocity;
-  } else if ( angularVelocity < -maxAngularVelocity ) {
-    angularVelocity = -maxAngularVelocity;
-  }
-
-  this._angularVelocity = angularVelocity;
+  this._angularVelocity = clamp( angularVelocity,
+                                -maxAngularVelocity,
+                                 maxAngularVelocity );
   return this;
 };
 
@@ -177,15 +105,11 @@ PhysicsEntity.prototype.getAngularAcceleration = function() {
 };
 
 PhysicsEntity.prototype.setAngularAcceleration = function( angularAcceleration ) {
-  var maxAngularAcceleration = this.getMaxAngularVelocity();
+  var maxAngularAcceleration = this.getMaxAngularAcceleration();
 
-  if ( angularAcceleration > maxAngularAcceleration ) {
-    angularAcceleration = maxAngularAcceleration;
-  } else if ( angularAcceleration < -maxAngularAcceleration ) {
-    angularAcceleration = -maxAngularAcceleration;
-  }
-
-  this._angularAcceleration = angularAcceleration;
+  this._angularAcceleration = clamp( angularAcceleration,
+                                    -maxAngularAcceleration,
+                                     maxAngularAcceleration );
   return this;
 };
 
@@ -213,3 +137,20 @@ PhysicsEntity.prototype.setMaxAngularAcceleration = function( maxAngularAccelera
   this._maxAngularAcceleration = maxAngularAcceleration;
   return this;
 };
+
+function clamp( value, min, max ) {
+  // Swap if the order is wrong.
+  if ( max < min ) {
+    var temp = min;
+    min = max;
+    max = temp;
+  }
+
+  if ( value < min ) {
+    value = min;
+  } else if ( value > max ) {
+    value = max;
+  }
+
+  return value;
+}
