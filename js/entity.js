@@ -1,7 +1,7 @@
 function Entity() {
   Object2D.call( this );
 
-  this._shapes = [];
+  this._objects = [];
 }
 
 Entity.prototype = new Object2D();
@@ -17,30 +17,30 @@ Entity.prototype.draw = function( ctx ) {
   ctx.save();
 
   ctx.translate( this.getX(), this.getY() );
-  ctx.rotate( -this.getAngle() );
+  ctx.rotate( this.getAngle() );
 
-  var shapes = this.getShapes();
-  for ( var i = 0, n = shapes.length; i < n; i++ ) {
-    shapes[i].draw( ctx );
+  var objects = this.getObjects();
+  for ( var i = 0, n = objects.length; i < n; i++ ) {
+    objects[i].draw( ctx );
   }
 
   ctx.restore();
 };
 
-Entity.prototype.getShapes = function() {
-  return this._shapes;
+Entity.prototype.getObjects = function() {
+  return this._objects;
 };
 
-Entity.prototype.addShape = function( shape ) {
-  this.getShapes().push( shape );
+Entity.prototype.addObject = function( object ) {
+  this.getObjects().push( object );
   return this;
 };
 
-Entity.prototype.removeShape = function( shape ) {
-  var shapes = this.getShapes();
-  var index = shapes.indexOf( shape );
+Entity.prototype.removeObject = function( object ) {
+  var objects = this.getObjects();
+  var index = objects.indexOf( object );
   if ( index !== -1 ) {
-    shapes.splice( index, 1 );
+    object.splice( index, 1 );
   }
 
   return this;

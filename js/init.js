@@ -14,6 +14,10 @@ var _game;
 function init() {
   _game = new Game();
 
+  var world = new WorldBuilder().create().setPosition( 0.5 * _game.WIDTH, 0.5 * _game.HEIGHT );
+  world.setBackgroundColor( _game.getBackgroundColor() );
+  _game.addEntity( world );
+
   _game._canvas.addEventListener( 'mousedown', onMouseDown, null );
   document.addEventListener( 'keydown', onKeyDown, null );
 

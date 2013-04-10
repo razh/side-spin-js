@@ -8,54 +8,130 @@ function World() {
   this._outerEntity = new Entity();
   this._innerEntity = new Entity();
 
-  this._outerRadius = 100;
-  this._innerRadius = 75;
-}
+  this._outerRadius = 250;
+  this._innerRadius = 125;
 
-World.PI2 = 2 * Math.PI;
+  this._backgroundColor = new Color( 127, 127, 127, 1.0 );
+
+  this._color.set( 127, 0, 0, 1.0 );
+}
 
 World.prototype = new Object2D();
 World.prototype.constructor = World;
 
 World.prototype.draw = function( ctx ) {
-  ctx.arc( this.getX(), this.getY(), this._outerRadius, 0, World.PI2 );
+  ctx.save();
+
+  ctx.translate( this.getX(), this.getY() );
+
+  ctx.beginPath();
+  ctx.arc( 0, 0, this._outerRadius, 0, PI2 );
   ctx.fillStyle = this.getColor().toString();
   ctx.fill();
 
-  ctx.globalCompositeOperation = 'xor';
-  ctx.arc( this.getX(), this.getY(), this._innerRadius, 0, World.PI2 );
+  // Just draw the inner circle with background color.
+  ctx.beginPath();
+  ctx.arc( 0, 0, this._innerRadius, 0, PI2 );
+  ctx.fillStyle = this.getBackgroundColor().toString();
   ctx.fill();
 
-  ctx.globalCompositeOperation = 'source-over';
+  this._outerEntity.draw( ctx );
+  this._innerEntity.draw( ctx );
+
+  ctx.restore();
 };
 
+World.prototype.update = function( elapsedTime ) {
+  this._outerEntity.update( elapsedTime );
+  this._innerEntity.update( elapsedTime );
+};
+
+// Entities.
 World.prototype.getOuterEntity = function() {
   return this._outerEntity;
-};
-
-World.prototype.addOuterShape = function( shape ) {
-  this._outerEntity.addShape( shape );
 };
 
 World.prototype.getInnerEntity = function() {
   return this._innerEntity;
 };
 
-World.prototype.addInnerShape = function( shape ) {
-  this._innerEntity
+// Radii.
+World.prototype.getOuterRadius = function() {
+  return this._outerRadius;
 };
 
+World.prototype.setOuterRadius = function( outerRadius ) {
+  this._outerRadius = outerRadius;
+  return this;
+};
+
+World.prototype.getInnerRadius = function() {
+  return this._innerRadius;
+};
+
+World.prototype.setInnerRadius = function( innerRadius ) {
+  this._innerRadius = innerRadius;
+  return this;
+};
+
+// Background color.
+World.prototype.getBackgroundColor = function()  {
+  return this._backgroundColor;
+};
+
+World.prototype.setBackgroundColor = function() {
+  this.getBackgroundColor().set.apply( this.getBackgroundColor(), arguments );
+  return this;
+};
 
 // WorldBuilder
 // ------------
 function WorldBuilder() {
-  this._segmentCount = 32;
-  this._outerRadius  = 100;
-  this._innerRadius  = 75;
+  this._count = 32;
+
+  this._outerRadius  = 250.0;
+  this._innerRadius  = 125.0;
+
+  this._outerLength = 25.0;
+  this._innerLength = 25.0;
 }
 
-WorldBuilder.prototype.setSegmentCount = function( segmentCount ) {
-  this._segmentCount = segmentCount;
+WorldBuilder.prototype.create = function() {
+  var startAngle = 0.0,
+      angle = PI2 / this._count;
+
+  var world = new World(),
+      outerEntity = world.getOuterEntity(),
+      innerEntity = world.getInnerEntity();
+
+  world.setOuterRadius( this._outerRadius )
+       .setInnerRadius( this._innerRadius );
+
+  var arc;
+  for ( var i = 0; i < this._count; i++ ) {
+    // Create outer arc.
+    arc = new Arc().setDistance( this._outerRadius )
+                   .setStartAngle( startAngle )
+                   .setEndAngle( startAngle + angle )
+                   .setLength( -this._outerLength * Math.random() ); // Negative, towards center.
+    outerEntity.addObject( arc );
+
+    // Create inner arc.
+    arc = new Arc().setDistance( this._innerRadius )
+                   .setStartAngle( startAngle )
+                   .setEndAngle( startAngle + angle )
+                   .setLength( this._innerLength * Math.random() );
+    innerEntity.addObject( arc );
+
+    // Rotate.
+    startAngle += angle;
+  }
+
+  return world;
+};
+
+WorldBuilder.prototype.setCount = function( count ) {
+  this._count = count;
   return this;
 };
 
@@ -66,4 +142,15 @@ WorldBuilder.prototype.setOuterRadius = function( outerRadius ) {
 
 WorldBuilder.prototype.setInnerRadius = function( innerRadius ) {
   this._innerRadius = innerRadius;
+  return this;
+};
+
+WorldBuilder.prototype.setOuterLength = function( outerLength ) {
+  this._outerLength = outerLength;
+  return this;
+};
+
+WorldBuilder.prototype.setInnerLength = function( innerLength ) {
+  this._innerLength = innerLength;
+  return this;
 };
