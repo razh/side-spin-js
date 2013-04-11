@@ -1,26 +1,32 @@
-function PlayerEntity() {
-  PhysicsEntity.call( this );
+define([
+  'PhysicsEntity'
+], function( PhysicsEntity ) {
+  function PlayerEntity() {
+    PhysicsEntity.call( this );
 
-  this.addObject( new Circle().setRadius( 20 )
-                              .setColor( 172, 191, 204, 1.0 ) );
-  this.setAngularVelocity( 60 * Math.PI / 180 );
-}
-
-PlayerEntity.prototype = new PhysicsEntity();
-PlayerEntity.prototype.constructor = PlayerEntity;
-
-PlayerEntity.prototype.draw = function( ctx ) {
-  if ( !this.isVisible() ) {
-    return;
+    this.addObject( new Circle().setRadius( 20 )
+                                .setColor( 172, 191, 204, 1.0 ) );
+    this.setAngularVelocity( 60 * Math.PI / 180 );
   }
 
-  ctx.save();
+  PlayerEntity.prototype = new PhysicsEntity();
+  PlayerEntity.prototype.constructor = PlayerEntity;
 
-  ctx.translate( this.getX(), this.getY() );
-  ctx.rotate( this.getAngle() );
-  ctx.translate( this.getDistance(), 0 );
+  PlayerEntity.prototype.draw = function( ctx ) {
+    if ( !this.isVisible() ) {
+      return;
+    }
 
-  this.drawObjects( ctx );
+    ctx.save();
 
-  ctx.restore();
-};
+    ctx.translate( this.getX(), this.getY() );
+    ctx.rotate( this.getAngle() );
+    ctx.translate( this.getDistance(), 0 );
+
+    this.drawObjects( ctx );
+
+    ctx.restore();
+  };
+
+  return PlayerEntity;
+});
