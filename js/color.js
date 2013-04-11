@@ -1,4 +1,5 @@
 define(function() {
+
   function Color() {
     this._red = 0;
     this._green = 0;
@@ -29,7 +30,7 @@ define(function() {
   };
 
   Color.prototype.setRed = function( red ) {
-    this._red = red;
+    this._red = red % 256;
     return this;
   };
 
@@ -38,7 +39,7 @@ define(function() {
   };
 
   Color.prototype.setGreen = function( green ) {
-    this._green = green;
+    this._green = green % 256;
     return this;
   };
 
@@ -47,12 +48,12 @@ define(function() {
   };
 
   Color.prototype.setBlue = function( blue ) {
-    this._blue = blue;
+    this._blue = blue % 256;
     return this;
   };
 
   Color.prototype.getAlpha = function() {
-    return this._alpha;
+    return this._alpha % 1.0;
   };
 
   Color.prototype.setAlpha = function( alpha ) {
@@ -69,9 +70,9 @@ define(function() {
   };
 
   Color.prototype.toString = function() {
-    return 'rgba( ' + ( ( 0.5 + this.getRed() )   << 0 ) +
-           ', '     + ( ( 0.5 + this.getGreen() ) << 0 ) +
-           ', '     + ( ( 0.5 + this.getBlue() )  << 0 ) +
+    return 'rgba( ' + Math.round( this.getRed()   ) +
+           ', '     + Math.round( this.getGreen() ) +
+           ', '     + Math.round( this.getBlue()  ) +
            ', '     + this.getAlpha() + ' )';
   };
 
@@ -80,9 +81,9 @@ define(function() {
   };
 
   Color.prototype.toHex = function() {
-    return ( ( ( 0.5 + this.getRed()   ) << 0 ) << 16 ) +
-           ( ( ( 0.5 + this.getGreen() ) << 0 ) << 8 ) +
-           ( (   0.5 + this.getBlue()  ) << 0 );
+    return ( Math.round( this.getRed()   ) << 16 ) +
+           ( Math.round( this.getGreen() ) << 8 ) +
+             Math.round( this.getBlue()  );
   };
 
   Color.prototype.fromJSON = function( json ) {
