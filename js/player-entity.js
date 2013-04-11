@@ -3,6 +3,7 @@ function PlayerEntity() {
 
   this.addObject( new Circle().setRadius( 20 )
                               .setColor( 172, 191, 204, 1.0 ) );
+  this.setAngularVelocity( 60 * Math.PI / 180 );
 }
 
 PlayerEntity.prototype = new PhysicsEntity();

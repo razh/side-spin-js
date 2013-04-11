@@ -15,8 +15,6 @@ function World() {
   this._innerRadius = 128.0;
 
   this._backgroundColor = new Color( 127, 127, 127, 1.0 );
-
-  this._color.set( 127, 0, 0, 1.0 );
 }
 
 World.prototype = new Object2D();
