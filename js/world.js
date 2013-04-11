@@ -8,8 +8,8 @@ function World() {
   this._outerEntity = new PhysicsEntity();
   this._innerEntity = new PhysicsEntity();
 
-  this._outerEntity.setAngularVelocity( 10 * Math.PI / 180 );
-  this._innerEntity.setAngularVelocity( -10 * Math.PI / 180 );
+  this._outerEntity.setAngularVelocity( 30 * Math.PI / 180 );
+  this._innerEntity.setAngularVelocity( -30 * Math.PI / 180 );
 
   this._outerRadius = 256.0;
   this._innerRadius = 128.0;
