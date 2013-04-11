@@ -11,7 +11,9 @@ define(
              };
     }) ();
 
-    function clamp( value, min, max ) {
+    var Util = {};
+
+    Util.clamp = function( value, min, max ) {
       // Swap if the order is wrong.
       if ( max < min ) {
         var temp = min;
@@ -26,11 +28,8 @@ define(
       }
 
       return value;
-    }
-
-    return {
-      clamp: clamp,
-      PI2: 2 * Math.PI
     };
+
+    return Util;
   }
 );
