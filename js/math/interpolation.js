@@ -2,6 +2,7 @@ define(
   [ '../util' ],
   function( Util ) {
 
+    // From libgdx.
     function pow( power ) {
       return function( a ) {
         if ( a < 0.5 ) {

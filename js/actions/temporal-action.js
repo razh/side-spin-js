@@ -111,6 +111,7 @@ define(
 
     TemporalAction.prototype.setReverse = function( reverse ) {
       this._reverse = reverse;
+      return this;
     };
 
     return TemporalAction;

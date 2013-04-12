@@ -1,8 +1,10 @@
 define(
   [ '../color',
     '../object2d',
-    '../entities/physics-entity' ],
-  function( Color, Object2D, PhysicsEntity ) {
+    '../entities/physics-entity',
+    '../actions/move-to-action',
+    '../math/interpolation' ],
+  function( Color, Object2D, PhysicsEntity, MoveToAction, Interpolation ) {
     var PI2 = 2 * Math.PI;
     // World
     // -----
@@ -21,6 +23,12 @@ define(
       this._innerRadius = 128.0;
 
       this._backgroundColor = new Color( 127, 127, 127, 1.0 );
+
+      this.addAction(
+        new MoveToAction().setPosition( 100, 200 )
+                          .setDuration( 2000 )
+                          .setInterpolation( Interpolation.circle )
+      );
     }
 
     World.prototype = new Object2D();
