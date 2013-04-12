@@ -64,7 +64,7 @@ define(
     };
 
     TemporalAction.prototype.restart = function() {
-      this._time = 0.0;
+      this._time = 0;
       this._complete = false;
     };
 
@@ -102,6 +102,15 @@ define(
     TemporalAction.prototype.setInterpolation = function( interpolation ) {
       this._interpolation = interpolation;
       return this;
+    };
+
+    // Reverse.
+    TemporalAction.prototype.isReverse = function() {
+      return this._reverse;
+    };
+
+    TemporalAction.prototype.setReverse = function( reverse ) {
+      this._reverse = reverse;
     };
 
     return TemporalAction;

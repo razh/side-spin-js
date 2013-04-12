@@ -10,7 +10,14 @@ define(
     Entity.prototype = new Object2D();
     Entity.prototype.constructor = Entity;
 
-    Entity.prototype.update = function( elapsedTime ) {};
+    Entity.prototype.act = function( delta ) {
+      Object2D.prototype.act.call( this, delta );
+
+      var objects = this.getObjects();
+      for ( var i = 0, n = objects.length; i < n; i++ ) {
+        objects[i].act( delta );
+      }
+    };
 
     Entity.prototype.draw = function( ctx ) {
       if ( !this.isVisible() ) {

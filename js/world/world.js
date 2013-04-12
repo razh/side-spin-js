@@ -48,9 +48,11 @@ define(
       ctx.restore();
     };
 
-    World.prototype.update = function( elapsedTime ) {
-      this._outerEntity.update( elapsedTime );
-      this._innerEntity.update( elapsedTime );
+    World.prototype.act = function( delta ) {
+      Object2D.prototype.act.call( this, delta );
+
+      this._outerEntity.act( delta );
+      this._innerEntity.act( delta );
     };
 
     // Entities.

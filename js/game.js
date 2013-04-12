@@ -29,22 +29,22 @@ define(
     Game.instance = null;
 
     Game.prototype.tick = function() {
-      this.update();
+      this.act();
       this.draw();
     };
 
-    Game.prototype.update = function() {
+    Game.prototype.act = function() {
       this._currTime = Date.now();
-      var elapsedTime = this._currTime - this._prevTime;
+      var delta = this._currTime - this._prevTime;
       this._prevTime = this._currTime;
 
-      if ( elapsedTime > 1e3 ) {
-        elapsedTime = 1e3;
+      if ( delta > 1e3 ) {
+        delta = 1e3;
       }
 
       var entities = this.getEntities();
       for ( var i = 0, n = entities.length; i < n; i++ ) {
-        entities[i].update( elapsedTime );
+        entities[i].act( delta );
       }
     };
 

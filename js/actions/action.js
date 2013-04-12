@@ -2,7 +2,7 @@
 // codebase anyway).
 define(function() {
   function Action() {
-    this._entity = null;
+    this._object = null;
   }
 
   Action.prototype.act = function( delta ) {};
@@ -13,12 +13,12 @@ define(function() {
     this.restart();
   };
 
-  Action.prototype.getEntity = function() {
-    return this._entity;
+  Action.prototype.getObject = function() {
+    return this._object;
   };
 
-  Action.prototype.setEntity = function( entity ) {
-    this._entity = entity;
+  Action.prototype.setObject = function( object ) {
+    this._object = object;
     return this;
   };
 

@@ -21,19 +21,19 @@ define(
     PhysicsEntity.prototype = new Entity();
     PhysicsEntity.prototype.constructor = PhysicsEntity;
 
-    PhysicsEntity.prototype.update = function( elapsedTime ) {
-      Entity.prototype.update.call( this, elapsedTime );
+    PhysicsEntity.prototype.act = function( delta ) {
+      Entity.prototype.act.call( this, delta );
 
       // Convert from milliseconds to seconds.
-      elapsedTime *= 1e-3;
+      delta *= 1e-3;
 
       // Handle radial translation.
-      this.radialAccelerate( this.getRadialAcceleration() * elapsedTime );
-      this.radialTranslate( this.getRadialVelocity() * elapsedTime );
+      this.radialAccelerate( this.getRadialAcceleration() * delta );
+      this.radialTranslate( this.getRadialVelocity() * delta );
 
       // Handle rotation.
-      this.angularAccelerate( this.getAngularAcceleration() * elapsedTime );
-      this.rotate( this.getAngularVelocity() * elapsedTime );
+      this.angularAccelerate( this.getAngularAcceleration() * delta );
+      this.rotate( this.getAngularVelocity() * delta );
     };
 
     // Radial velocity.

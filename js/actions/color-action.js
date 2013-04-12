@@ -41,6 +41,30 @@ define(
       this._color.set( r, g, b, a );
     };
 
+    ColorAction.prototype.reset = function() {
+      TemporalAction.prototype.reset.call( this );
+      this._color = null;
+    };
+
+    // Color.
+    ColorAction.prototype.getColor = function() {
+      return this._color;
+    };
+
+    ColorAction.prototype.setColor = function( color ) {
+      this._color = color;
+      return this;
+    };
+
+    // End color.
+    ColorAction.prototype.getEndColor = function() {
+      return this._endColor;
+    };
+
+    ColorAction.prototype.setEndColor = function( color ) {
+      this._endColor.set( color );
+    };
+
     return ColorAction;
   }
 );

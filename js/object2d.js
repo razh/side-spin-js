@@ -14,7 +14,33 @@ define(
 
       this._visible   = true;
       this._colliding = true;
+
+      this._actions = [];
     }
+
+    Object2D.prototype.act = function( delta ) {
+      var actions = this.getActions();
+      var action;
+      for ( var i = 0, n = actions.size; i < n; i++ ) {
+        action = actions[i];
+        if ( action.act( delta ) ) {
+          actions.splice( i, 1 );
+          action.setActor( null );
+          i--;
+          n--;
+        }
+      }
+    };
+
+    Object2D.prototype.addAction = function( action ) {
+      action.setObject( this );
+      this._actions.push( action );
+    };
+
+    // Actions.
+    Object2D.prototype.getActions = function() {
+      return this._actions;
+    };
 
     // Position.
     Object2D.prototype.getX = function() {
