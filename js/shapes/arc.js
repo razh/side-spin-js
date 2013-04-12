@@ -1,6 +1,8 @@
 define(
-  [ '../object2d' ],
-  function( Object2D ) {
+  [ '../object2d',
+    '../actions/color-action',
+    '../math/interpolation' ],
+  function( Object2D, ColorAction, Interpolation ) {
     function Arc() {
       Object2D.call( this );
 
@@ -8,6 +10,12 @@ define(
       this._endAngle   = 0.0;
 
       this._length = 0.0;
+
+      this.addAction(
+        new ColorAction().setEndColor( 255, 0, 0, 1.0 )
+                         .setDuration( 2000 )
+                         .setInterpolation( Interpolation.expo10 )
+      );
     }
 
     Arc.prototype = new Object2D();

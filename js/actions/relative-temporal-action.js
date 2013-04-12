@@ -2,7 +2,7 @@
 define(
   [ './temporal-action' ],
   function( TemporalAction ) {
-  // RelativeTemporalAction.
+     // RelativeTemporalAction.
     function RelativeTemporalAction() {
       TemporalAction.call( this );
 

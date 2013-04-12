@@ -21,23 +21,38 @@ define(
     Object2D.prototype.act = function( delta ) {
       var actions = this.getActions();
       var action;
-      for ( var i = 0, n = actions.size; i < n; i++ ) {
+      for ( var i = 0, n = actions.length; i < n; i++ ) {
         action = actions[i];
         if ( action.act( delta ) ) {
           actions.splice( i, 1 );
-          action.setActor( null );
+          action.setObject( null );
           i--;
           n--;
         }
       }
     };
 
+    // Actions.
     Object2D.prototype.addAction = function( action ) {
       action.setObject( this );
       this._actions.push( action );
     };
 
-    // Actions.
+    Object2D.prototype.removeAction = function( action ) {
+      var index = this._actions.indexOf( action );
+      if ( index !== -1 ) {
+        this._actions.splice( index, 1 ).setObject( null );
+      }
+    };
+
+    Object2D.prototype.clearActions = function() {
+      for ( var i = this._actions.length - 1; i >= 0; i-- ) {
+        this._actions[i].setObject( null );
+      }
+
+      this._actions = [];
+    };
+
     Object2D.prototype.getActions = function() {
       return this._actions;
     };

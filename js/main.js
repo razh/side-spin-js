@@ -4,8 +4,9 @@ require(
     'input',
     'world/world-builder',
     'entities/entity',
-    'entities/player-entity' ],
-  function( Game, Util, Input, WorldBuilder, Entity, PlayerEntity ) {
+    'entities/player-entity',
+    'math/interpolation' ],
+  function( Game, Util, Input, WorldBuilder, Entity, PlayerEntity, Interpolation ) {
     var _game;
 
     function init() {

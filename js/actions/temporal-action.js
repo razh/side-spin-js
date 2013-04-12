@@ -30,7 +30,7 @@ define(
       }
 
       this._time += delta;
-      this._complete = time >= duration;
+      this._complete = this._time >= this._duration;
 
       var percent;
 
@@ -39,7 +39,7 @@ define(
       } else {
         percent = this._time / this._duration;
         if ( this._interpolation !== null ) {
-          percent = interpolation.apply( percent );
+          percent = this._interpolation.call( this, percent );
         }
       }
 

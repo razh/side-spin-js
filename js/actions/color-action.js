@@ -21,7 +21,7 @@ define(
 
     ColorAction.prototype.begin = function() {
       if ( this._color === null ) {
-        this._color = this.getActor().getColor();
+        this._color = this.getObject().getColor();
       }
 
       this._startR = this._color.getRed();
@@ -61,8 +61,9 @@ define(
       return this._endColor;
     };
 
-    ColorAction.prototype.setEndColor = function( color ) {
-      this._endColor.set( color );
+    ColorAction.prototype.setEndColor = function() {
+      this.getEndColor().set.apply( this.getEndColor(), arguments );
+      return this;
     };
 
     return ColorAction;
