@@ -2,9 +2,9 @@ define(
   [ '../color',
     '../object2d',
     '../entities/physics-entity',
-    '../actions/move-to-action',
+    '../actions/move-by-action',
     '../math/interpolation' ],
-  function( Color, Object2D, PhysicsEntity, MoveToAction, Interpolation ) {
+  function( Color, Object2D, PhysicsEntity, MoveByAction, Interpolation ) {
     var PI2 = 2 * Math.PI;
     // World
     // -----
@@ -25,9 +25,9 @@ define(
       this._backgroundColor = new Color( 127, 127, 127, 1.0 );
 
       this.addAction(
-        new MoveToAction().setPosition( 100, 200 )
+        new MoveByAction().setAmount( 200, 200 )
                           .setDuration( 2000 )
-                          .setInterpolation( Interpolation.circle )
+                          .setInterpolation( Interpolation.quad )
       );
     }
 
