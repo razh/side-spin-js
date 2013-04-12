@@ -7,7 +7,7 @@ define(
       RelativeTemporalAction.call( this );
 
       this._amountX = 0.0;
-      this._amountX = 0.0;
+      this._amountY = 0.0;
     }
 
     MoveByAction.prototype = new RelativeTemporalAction();

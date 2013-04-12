@@ -1,3 +1,4 @@
+// From libgdx.
 define(
   [ './action' ],
   function( Action ) {
