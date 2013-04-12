@@ -9,8 +9,10 @@ define(function( require ) {
       MoveByAction   = require( './move-by-action'  ),
       MoveToAction   = require( './move-to-action'  ),
       ParallelAction = require( './parallel-action' ),
+      RemoveAction   = require( './remove-action'   );
       RepeatAction   = require( './repeat-action'   );
-      SequenceAction = require( './sequence-action' );
+      SequenceAction = require( './sequence-action' ),
+      VisibleAction  = require( './visible-action'  );
 
   return {
     moveTo: function( x, y, duration, interpolation ) {
@@ -81,11 +83,48 @@ define(function( require ) {
       return alpha( 1, duration, interpolation );
     },
 
+    show: function() {
+      return visible( true );
+    },
+
+    hide: function() {
+      return visible( false );
+    },
+
+    visible: function( visible ) {
+      return new VisibleAction().setVisible( visible );
+    },
+
+    removeOject: function( removeObject ) {
+      removeObject = removeObject || null;
+
+      return new RemoveAction()
+        .setRemoveObject( removeObject );
+    },
+
+    delay: function( duration, delayedAction ) {
+      delayedAction = delayedAction || null;
+
+      return new DelayAction()
+        .setDuration( duration )
+        .setAction( delayedAction );
+    },
+
+    sequence: function() {
+      var sequenceAction = new SequenceAction();
+
+      for ( var i = 0, n = arguments.length; i < n; i++ ) {
+        sequenceAction.addAction( arguments[i] );
+      }
+
+      return sequenceAction;
+    },
+
     parallel: function() {
       var parallelAction = new ParallelAction();
 
       for ( var i = 0, n = arguments.length; i < n; i++ ) {
-        parallelAction.addAction( arguments[0] );
+        parallelAction.addAction( arguments[i] );
       }
 
       return parallelAction;

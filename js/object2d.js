@@ -15,6 +15,8 @@ define(
       this._visible   = true;
       this._colliding = true;
 
+      this._parent = null;
+
       this._actions = [];
     }
 
@@ -30,6 +32,14 @@ define(
           n--;
         }
       }
+    };
+
+    Object2D.prototype.remove = function() {
+      if ( this._parent !== null ) {
+        return this._parent.removeObject( this );
+      }
+
+      return false;
     };
 
     // Actions.
@@ -161,6 +171,7 @@ define(
 
     Object2D.prototype.setVisible = function( visible ) {
       this._visible = visible;
+      return this;
     };
 
     // Collision.
@@ -170,6 +181,17 @@ define(
 
     Object2D.prototype.setColliding = function( colliding ) {
       this._colliding = colliding;
+      return this;
+    };
+
+    // Parent.
+    Object2D.prototype.getParent = function() {
+      return this._parent;
+    };
+
+    Object2D.prototype.setParent = function( parent ) {
+      this._parent = parent;
+      return this;
     };
 
     // JSON.

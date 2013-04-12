@@ -47,6 +47,7 @@ define(
 
     Entity.prototype.addObject = function( object ) {
       this.getObjects().push( object );
+      object.setParent( this );
       return this;
     };
 
@@ -54,7 +55,8 @@ define(
       var objects = this.getObjects();
       var index = objects.indexOf( object );
       if ( index !== -1 ) {
-        object.splice( index, 1 );
+        objects.splice( index, 1 );
+        object.setParent( null );
       }
 
       return this;
