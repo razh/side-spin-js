@@ -1,18 +1,20 @@
 // From libgdx.
 define(function( require ) {
-  var Action         = require( './action'          ),
-      AlphaAction    = require( './alpha-action'    ),
-      AngleByAction  = require( './angle-by-action' ),
-      AngleToAction  = require( './angle-to-action' ),
-      ColorAction    = require( './color-action'    ),
-      DelayAction    = require( './delay-action'    ),
-      MoveByAction   = require( './move-by-action'  ),
-      MoveToAction   = require( './move-to-action'  ),
-      ParallelAction = require( './parallel-action' ),
-      RemoveAction   = require( './remove-action'   );
-      RepeatAction   = require( './repeat-action'   );
-      SequenceAction = require( './sequence-action' ),
-      VisibleAction  = require( './visible-action'  );
+  var Action           = require( './action'             ),
+      AlphaAction      = require( './alpha-action'       ),
+      AngleByAction    = require( './angle-by-action'    ),
+      AngleToAction    = require( './angle-to-action'    ),
+      ColorAction      = require( './color-action'       ),
+      DelayAction      = require( './delay-action'       ),
+      DistanceByAction = require( './distance-by-action' ),
+      DistanceToAction = require( './distance-to-action' ),
+      MoveByAction     = require( './move-by-action'     ),
+      MoveToAction     = require( './move-to-action'     ),
+      ParallelAction   = require( './parallel-action'    ),
+      RemoveAction     = require( './remove-action'      );
+      RepeatAction     = require( './repeat-action'      );
+      SequenceAction   = require( './sequence-action'    ),
+      VisibleAction    = require( './visible-action'     );
 
   return {
     moveTo: function( x, y, duration, interpolation ) {
