@@ -62,6 +62,43 @@ define(
       return this;
     };
 
+    // Actions.
+    Entity.prototype.addAction = function( action ) {
+      Object2D.prototype.addAction.call( this, action );
+
+      var objects = this.getObjects();
+      for ( var i = 0, n = objects.length; i < n; i++ ) {
+        objects[i].addAction( action.clone() );
+      }
+    };
+
+    Entity.prototype.removeAction = function( action ) {
+      Object2D.prototype.removeAction.call( this, action );
+
+      var objects = this.getObjects();
+      var actions;
+      var i, j, il, jl;
+      for ( i = 0, il = objects.length; i < il; i++ ) {
+        actions = objects[i].getActions();
+        for ( j = 0, jl = actions.length; j < jl; j++ ) {
+          if ( actions[j].equals( action ) ) {
+            actions.splice( j, 1 ).setObject( null );
+            j--;
+            jl--;
+          }
+        }
+      }
+    };
+
+    Entity.prototype.clearActions = function() {
+      Object2D.prototype.clearActions.call( this );
+
+      var objects = this.getObjects();
+      for ( var i = 0, n = objects.length; i < n; i++ ) {
+        objects[i].clearActions();
+      }
+    };
+
     // JSON.
     Entity.prototype.fromJSON = function( json ) {
       Object2D.prototype.fromJSON.call( this, json );

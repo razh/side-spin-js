@@ -95,7 +95,7 @@ define(function( require ) {
       return new VisibleAction().setVisible( visible );
     },
 
-    removeOject: function( removeObject ) {
+    remove: function( removeObject ) {
       removeObject = removeObject || null;
 
       return new RemoveAction()

@@ -10,6 +10,7 @@ define(
     var moveBy   = Actions.moveBy,
         sequence = Actions.sequence;
         var delay = Actions.delay;
+        var removeObject = Actions.removeObject;
     // World
     // -----
     // A world is made up of two entities (outer and inner) which

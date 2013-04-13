@@ -1,13 +1,26 @@
 define(
   [ './physics-entity',
+    '../color',
+    '../math/interpolation',
+    '../actions/actions',
     '../shapes/circle' ],
-  function( PhysicsEntity, Circle ) {
+  function( PhysicsEntity, Color, Interpolation, Actions, Circle ) {
+    var color = Actions.color,
+        delay = Actions.delay,
+        remove = Actions.remove;
+
     function PlayerEntity() {
       PhysicsEntity.call( this );
 
       this.addObject( new Circle().setRadius( 20 )
                                   .setColor( 172, 191, 204, 1.0 ) );
       this.setAngularVelocity( 60 * Math.PI / 180 );
+
+      this.addAction(
+        delay( 1000 ),
+        color( new Color( 0, 0, 127, 1.0 ), 1000, Interpolation.quad ),
+        remove()
+      );
     }
 
     PlayerEntity.prototype = new PhysicsEntity();

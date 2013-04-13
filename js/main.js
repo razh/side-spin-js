@@ -17,9 +17,9 @@ require(
                                     .create()
                                     .setPosition( 0.5 * _game.WIDTH, 0.5 * _game.HEIGHT );
       world.setBackgroundColor( _game.getBackgroundColor() );
-      _game.addEntity( world );
+      _game.addObject( world );
 
-      _game.addEntity( new PlayerEntity().setPosition( 0.5 * _game.WIDTH, 0.5 * _game.HEIGHT )
+      _game.addObject( new PlayerEntity().setPosition( 0.5 * _game.WIDTH, 0.5 * _game.HEIGHT )
                                          .setDistance( 192.0 ) );
 
       _game._canvas.addEventListener( 'mousedown', Input.onMouseDown, null );

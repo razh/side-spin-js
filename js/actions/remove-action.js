@@ -37,6 +37,7 @@ define(
 
     RemoveAction.prototype.setRemoveObject = function( removeObject ) {
       this._removeObject = removeObject;
+      return this;
     };
 
     return RemoveAction;

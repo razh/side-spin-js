@@ -22,5 +22,9 @@ define(function() {
     return this;
   };
 
+  Action.prototype.clone = function( action ) {
+    return new Action().setObject( this._object );
+  };
+
   return Action;
 });

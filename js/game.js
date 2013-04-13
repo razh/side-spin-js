@@ -20,7 +20,7 @@ define(
       this._currTime = this._prevTime;
       this._running = true;
 
-      this._entities = [];
+      this._objects = [];
 
       this.EPSILON = 1e-5;
     }
@@ -42,9 +42,9 @@ define(
         delta = 1e3;
       }
 
-      var entities = this.getEntities();
-      for ( var i = 0, n = entities.length; i < n; i++ ) {
-        entities[i].act( delta );
+      var objects = this.getObjects();
+      for ( var i = 0, n = objects.length; i < n; i++ ) {
+        objects[i].act( delta );
       }
     };
 
@@ -58,20 +58,29 @@ define(
       this._ctx.translate( 0, this.HEIGHT );
       this._ctx.scale( 1, -1 );
 
-      var entities = this.getEntities();
-      for ( var i = 0, n = entities.length; i < n; i++ ) {
-        entities[i].draw( this._ctx );
+      var objects = this.getObjects();
+      for ( var i = 0, n = objects.length; i < n; i++ ) {
+        objects[i].draw( this._ctx );
       }
 
       this._ctx.restore();
     };
 
-    Game.prototype.getEntities = function() {
-      return this._entities;
+    Game.prototype.getObjects = function() {
+      return this._objects;
     };
 
-    Game.prototype.addEntity = function( entity ) {
-      this.getEntities().push( entity );
+    Game.prototype.addObject = function( object ) {
+      this.getObjects().push( object );
+      object.setParent( this );
+    };
+
+    Game.prototype.removeObject = function( object ) {
+      var objects = this.getObjects();
+      var index = object.indexOf( object );
+      if ( index !== -1 ) {
+        objects.splice( index, 1 ).setParent( null );
+      }
     };
 
     // Background color.
