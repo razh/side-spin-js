@@ -88,6 +88,17 @@ define(
                Math.round( this.getBlue()  );
     };
 
+    Color.prototype.clone = function( color ) {
+      return new Color().set( color );
+    };
+
+    Color.prototype.equals = function( color ) {
+      return color.getRed()   === this.getRed()   &&
+             color.getGreen() === this.getGreen() &&
+             color.getBlue()  === this.getBlue()  &&
+             color.getAlpha() === this.getAlpha();
+    };
+
     Color.prototype.fromJSON = function( json ) {
       var jsonObject = JSON.parse( json );
       return this.setRed(   jsonObject.r || 0 )

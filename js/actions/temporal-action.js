@@ -114,6 +114,30 @@ define(
       return this;
     };
 
+    TemporalAction.prototype.clone = function() {
+      return new TemporalAction().set( this );
+    };
+
+    TemporalAction.prototype.set = function( action ) {
+      return Action.prototype.set.call( this, action )
+        .setDuration( action.getDuration() )
+        .setTime( action.getTime() )
+        .setInterpolation( action.getInterpolation() )
+        .setReverse( action.isReverse() );
+    };
+
+    TemporalAction.prototype.equals = function( action ) {
+      if ( action instanceof TemporalAction ) {
+        return Action.prototype.equals.call( this, action )          &&
+               action.getDuration()      === this.getDuration()      &&
+               action.getTime()          === this.getTime()          &&
+               action.getInterpolation() === this.getInterpolation() &&
+               action.isReverse()        === this.isReverse();
+      }
+
+      return false;
+    };
+
     return TemporalAction;
   }
 );

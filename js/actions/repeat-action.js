@@ -63,6 +63,24 @@ define(
       this._repeatCount = count;
     };
 
+    RepeatAction.prototype.clone = function() {
+      return new RepeatAction().set( this );
+    };
+
+    RepeatAction.prototype.set = function( action ) {
+      return DelegateAction.prototype.set.call( this, action )
+        .setCount( action.getCount() );
+    };
+
+    RepeatAction.prototype.equals = function( action ) {
+      if ( action instanceof RepeatAction ) {
+        return DelegateAction.prototype.equals.call( this, action ) &&
+               action.getCount() === this.getCount();
+      }
+
+      return false;
+    };
+
     return RepeatAction;
   }
 );

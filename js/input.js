@@ -12,6 +12,7 @@ define(
     }
 
     function onKeyDown( event ) {
+      console.log( event.which )
       switch( event.which ) {
         // q.
         case 81:

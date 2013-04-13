@@ -23,6 +23,18 @@ define(
 
     RelativeTemporalAction.prototype.updateRelative = function( percentDelta ) {};
 
+    RelativeTemporalAction.prototype.clone = function() {
+      return new RelativeTemporalAction().set( this );
+    };
+
+    RelativeTemporalAction.prototype.equals = function( action ) {
+      if ( action instanceof RelativeTemporalAction ) {
+        return TemporalAction.prototype.equals.call( this, action );
+      }
+
+      return false;
+    };
+
     return RelativeTemporalAction;
   }
 );

@@ -41,6 +41,26 @@ define(
       this._amountY = y;
     };
 
+    MoveByAction.prototype.clone = function() {
+      return new MoveByAction().set( this );
+    };
+
+    MoveByAction.prototype.set = function( action ) {
+      return RelativeTemporalAction.prototype.set.call( this, action )
+        .setAmountX( action.getAmountX() )
+        .setAmountY( action.getAmountY() );
+    };
+
+    MoveByAction.prototype.equals = function( action ) {
+      if ( action instanceof MoveByAction ) {
+        return RelativeTemporalAction.prototype.equals.call( this, action ) &&
+               action.getAmountX() === this.getAmountX() &&
+               action.getAmountY() === this.getAmountY();
+      }
+
+      return false;
+    };
+
     return MoveByAction;
   }
 );

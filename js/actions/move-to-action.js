@@ -50,6 +50,26 @@ define(
       return this;
     };
 
+    MoveToAction.prototype.clone = function() {
+      return new MoveToAction().set( this );
+    };
+
+    MoveToAction.prototype.set = function( action ) {
+      return TemporalAction.prototype.set.call( this, action )
+        .setX( action.getX() )
+        .setY( action.getY() );
+    };
+
+    MoveToAction.prototype.equals = function( action ) {
+      if ( action instanceof MoveToAction ) {
+        return TemporalAction.prototype.equals.call( this, action ) &&
+               action.getX() === this.getY() &&
+               action.getY() === this.getY();
+      }
+
+      return false;
+    };
+
     return MoveToAction;
   }
 );

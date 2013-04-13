@@ -66,6 +66,24 @@ define(
       return this;
     };
 
+    ColorAction.prototype.clone = function() {
+      return new ColorAction().set( this );
+    };
+
+    ColorAction.prototype.set = function( action ) {
+      return TemporalAction.prototype.set.call( this, action )
+        .setEndColor( action.getEndColor() );
+    };
+
+    ColorAction.prototype.equals = function( action ) {
+      if ( action instanceof ColorAction ) {
+        return TemporalAction.prototype.equals.call( this, action ) &&
+               action.getEndColor() === this.getEndColor();
+      }
+
+      return false;
+    };
+
     return ColorAction;
   }
 );

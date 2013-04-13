@@ -33,6 +33,18 @@ define(
       this._index = 0;
     };
 
+    SequenceAction.prototype.clone = function() {
+      return new SequenceAction().set( this );
+    };
+
+    SequenceAction.prototype.equals = function( action ) {
+      if ( action instanceof SequenceAction ) {
+        return ParallelAction.prototype.equals.call( this, action );
+      }
+
+      return false;
+    };
+
     return SequenceAction;
   }
 );

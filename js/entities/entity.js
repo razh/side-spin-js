@@ -4,7 +4,7 @@ define(
     function Entity() {
       Object2D.call( this );
 
-      this._objects = [];
+      this._children = [];
     }
 
     Entity.prototype = new Object2D();
@@ -13,9 +13,9 @@ define(
     Entity.prototype.act = function( delta ) {
       Object2D.prototype.act.call( this, delta );
 
-      var objects = this.getObjects();
-      for ( var i = 0, n = objects.length; i < n; i++ ) {
-        objects[i].act( delta );
+      var children = this.getChildren();
+      for ( var i = 0, n = children.length; i < n; i++ ) {
+        children[i].act( delta );
       }
     };
 
@@ -29,57 +29,54 @@ define(
       ctx.translate( this.getX(), this.getY() );
       ctx.rotate( this.getAngle() );
 
-      this.drawObjects( ctx );
+      this.drawChildren( ctx );
 
       ctx.restore();
     };
 
-    Entity.prototype.drawObjects = function( ctx ) {
-      var objects = this.getObjects();
-      for ( var i = 0, n = objects.length; i < n; i++ ) {
-        objects[i].draw( ctx );
+    Entity.prototype.drawChildren = function( ctx ) {
+      var children = this.getChildren();
+      for ( var i = 0, n = children.length; i < n; i++ ) {
+        children[i].draw( ctx );
       }
     };
 
-    Entity.prototype.getObjects = function() {
+    Entity.prototype.getChildren = function() {
       return this._objects;
     };
 
-    Entity.prototype.addObject = function( object ) {
-      this.getObjects().push( object );
-      object.setParent( this );
+    Entity.prototype.addChild = function( child ) {
+      this.getChildren().push( child );
+      child.setParent( this );
       return this;
     };
 
-    Entity.prototype.removeObject = function( object ) {
-      var objects = this.getObjects();
-      var index = objects.indexOf( object );
+    Entity.prototype.removeChild = function( child ) {
+      var children = this.getChildren();
+      var index = children.indexOf( child );
       if ( index !== -1 ) {
-        objects.splice( index, 1 );
-        object.setParent( null );
+        children.splice( index, 1 );
+        child.setParent( null );
       }
 
       return this;
     };
 
     // Actions.
-    Entity.prototype.addAction = function( action ) {
-      Object2D.prototype.addAction.call( this, action );
-
-      var objects = this.getObjects();
-      for ( var i = 0, n = objects.length; i < n; i++ ) {
-        objects[i].addAction( action.clone() );
+    Entity.prototype.addActionToChildren = function( action ) {
+      var children = this.getChildren();
+      for ( var i = 0, n = children.length; i < n; i++ ) {
+        children[i].addAction( action.clone() );
       }
     };
 
-    Entity.prototype.removeAction = function( action ) {
-      Object2D.prototype.removeAction.call( this, action );
-
-      var objects = this.getObjects();
+    // Removes similar actions from children (using .equals() check).
+    Entity.prototype.removeActionFromChildren = function( action ) {
+      var children = this.getChildren();
       var actions;
       var i, j, il, jl;
-      for ( i = 0, il = objects.length; i < il; i++ ) {
-        actions = objects[i].getActions();
+      for ( i = 0, il = children.length; i < il; i++ ) {
+        actions = children[i].getActions();
         for ( j = 0, jl = actions.length; j < jl; j++ ) {
           if ( actions[j].equals( action ) ) {
             actions.splice( j, 1 ).setObject( null );
@@ -90,12 +87,10 @@ define(
       }
     };
 
-    Entity.prototype.clearActions = function() {
-      Object2D.prototype.clearActions.call( this );
-
-      var objects = this.getObjects();
-      for ( var i = 0, n = objects.length; i < n; i++ ) {
-        objects[i].clearActions();
+    Entity.prototype.clearActionsFromChildren = function() {
+      var children = this.getChildren();
+      for ( var i = 0, n = children.length; i < n; i++ ) {
+        children[i].clearActions();
       }
     };
 

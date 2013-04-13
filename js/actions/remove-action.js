@@ -40,6 +40,24 @@ define(
       return this;
     };
 
+    RemoveAction.prototype.clone = function() {
+      return new RemoveAction().set( this );
+    };
+
+    RemoveAction.prototype.set = function( action ) {
+      return Action.prototype.set.call( this, action )
+        .setRemoveObject( action.getRemoveObject() );
+    };
+
+    RemoveAction.prototype.equals = function( action ) {
+      if ( action instanceof RemoveAction ) {
+        return Action.prototype.equals.call( this, action ) &&
+               action.getRemoveObject() === this.getRemoveObject();
+      }
+
+      return false;
+    };
+
     return RemoveAction;
   }
 );

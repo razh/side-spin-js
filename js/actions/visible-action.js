@@ -24,6 +24,24 @@ define(
       return this;
     };
 
+    VisibleAction.prototype.clone = function() {
+      return new VisibleAction().set( this );
+    };
+
+    VisibleAction.prototype.set = function( action ) {
+      return Action.prototype.set.call( this, action )
+        .setVisible( this.isVisible );
+    };
+
+    VisibleAction.prototype.equals = function( action ) {
+      if ( action instanceof VisibleAction ) {
+        return Action.prototype.equals.call( this, action ) &&
+               action.isVisible() === this.isVisible();
+      }
+
+      return false;
+    };
+
     return VisibleAction;
   }
 );

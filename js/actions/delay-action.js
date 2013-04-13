@@ -59,6 +59,25 @@ define(
       return this;
     };
 
+    DelayAction.prototype.clone = function() {
+      return new DelayAction().set( this );
+    };
+
+    DelayAction.prototype.set = function( action ) {
+      return DelegateAction.prototype.set.call( this, action )
+        .setDuration( action.getDuration() )
+        .setTime( action.getTime() );
+    };
+
+    DelayAction.prototype.equals = function( action ) {
+      if ( action instanceof DelayAction ) {
+        return DelegateAction.prototype.equals.call( this, action ) &&
+               action.getDuration() === this.getDuration();
+      }
+
+      return false;
+    };
+
     return DelayAction;
   }
 );

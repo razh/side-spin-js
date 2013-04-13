@@ -24,6 +24,24 @@ define(
       return this;
     };
 
+    AngleByAction.prototype.clone = function() {
+      return new AngleByAction().set( this );
+    };
+
+    AngleByAction.prototype.set = function( action ) {
+      return RelativeTemporalAction.prototype.set.call( this, action )
+        .setAmount( action.getAmount() );
+    };
+
+    AngleByAction.prototype.equals = function( action ) {
+      if ( action instanceof AngleByAction ) {
+        return RelativeTemporalAction.prototype.equals.call( this, action ) &&
+               action.getAmount() === this.getAmount();
+      }
+
+      return false;
+    };
+
     return AngleByAction;
   }
 );

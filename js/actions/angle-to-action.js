@@ -30,6 +30,24 @@ define(
       return this;
     };
 
+    AngleToAction.prototype.clone = function() {
+      return new AngleToAction().set( this );
+    };
+
+    AngleToAction.prototype.set = function( action ) {
+      return TemporalAction.prototype.set.call( this, action )
+        .setAngle( action.getAngle() );
+    };
+
+    AngleToAction.prototype.equals = function( action ) {
+      if ( action instanceof AngleToAction ) {
+        return TemporalAction.prototype.equals.call( this, action ) &&
+               action.getAngle() === this.getAngle();
+      }
+
+      return false;
+    };
+
     return AngleToAction;
   }
 );

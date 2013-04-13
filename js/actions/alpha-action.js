@@ -50,6 +50,24 @@ define(
       return this;
     };
 
+    AlphaAction.prototype.clone = function() {
+      return new AlphaAction().set( this );
+    };
+
+    AlphaAction.prototype.set = function( action ) {
+      return TemporalAction.prototype.set.call( this, action )
+        .setAlpha( action.getAlpha() );
+    };
+
+    AlphaAction.prototype.equals = function( action ) {
+      if ( action instanceof AlphaAction ) {
+        return TemporalAction.prototype.equals.call( this ) &&
+               action.getAlpha() === this.getAlpha();
+      }
+
+      return false;
+    };
+
     return AlphaAction;
   }
 );

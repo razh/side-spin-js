@@ -66,6 +66,42 @@ define(
       return this._actions;
     };
 
+    ParallelAction.prototype.clone = function() {
+      return new ParallelAction().set( this );
+    };
+
+    ParallelAction.prototype.set = function( action ) {
+      action = Action.prototype.set.call( this, action );
+
+      var actions = this.getActions();
+      for ( var i = 0, n = actions.length; i < n; i++ ) {
+        action.addAction( actions[i].clone() );
+      }
+
+      return action;
+    };
+
+    ParallelAction.prototype.equals = function( action ) {
+      if ( !( action instanceof ParallelAction ) ) {
+        return false;
+      }
+
+      var actions = this.getActions(),
+          otherActions = actions.getActions();
+
+      if ( actions.length !== otherActions.length ) {
+        return false;
+      }
+
+      for ( var i = 0, n = actions.length; i < n; i++ ) {
+        if ( !actions[i].equals( otherActions[i] ) ) {
+          return false;
+        }
+      }
+
+      return Action.prototype.equals.call( this, action );
+    };
+
     return ParallelAction;
   }
 );

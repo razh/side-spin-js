@@ -22,8 +22,20 @@ define(function() {
     return this;
   };
 
-  Action.prototype.clone = function( action ) {
-    return new Action().setObject( this._object );
+  Action.prototype.clone = function() {
+    return new Action().set( this );
+  };
+
+  /**
+   * Sets this action equal to the given action.
+   */
+  Action.prototype.set = function( action ) {
+    return action;
+  };
+
+  // Allows us to check if actions from different objects are equal.
+  Action.prototype.equals = function( action ) {
+    return action instanceof Action;
   };
 
   return Action;

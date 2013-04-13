@@ -40,6 +40,29 @@ define(
       return Action.prototype.setObject.call( this, object );
     };
 
+    DelegateAction.prototype.clone = function() {
+      return new DelegateAction().set( this );
+    };
+
+    DelegateAction.prototype.set = function( action ) {
+      action = Action.prototype.set.call( this, action );
+
+      if ( action.getAction() !== null ) {
+        this.setAction( action.getAction().clone() );
+      }
+
+      return action;
+    };
+
+    DelegateAction.prototype.equals = function( action ) {
+      if ( action instanceof DelegateAction ) {
+        return Action.prototype.equals( action ) &&
+               action.getAction().equals( this.getAction() );
+      }
+
+      return false;
+    };
+
     return DelegateAction;
   }
 );
