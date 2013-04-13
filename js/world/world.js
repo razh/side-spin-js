@@ -48,12 +48,18 @@ define(
         )
       );
 
-      var increase = Math.random() * 40 + 10,
-          decrease = -increase;
-
       this._outerEntity.addActionToChildren(
-        sequence(
-          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
+        color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 )
+      );
+
+      var children = this._outerEntity.getChildren();
+      var i, n;
+      var increase, decrease;
+      for ( i = 0, n = children.length; i < n; i++ ) {
+        increase = Math.random() * 40 + 10;
+        decrease = -increase;
+
+        children[i].addAction(
           forever(
             sequence(
               lengthBy( decrease, Math.random() * 1000 + 1000, Interpolation.quintOut ),
@@ -62,12 +68,19 @@ define(
               lengthBy( increase, Math.random() * 1000 + 1000, Interpolation.quad )
             )
           )
-        )
-      );
+        );
+      }
 
       this._innerEntity.addActionToChildren(
-        sequence(
-          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
+        color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 )
+      );
+
+      children = this._innerEntity.getChildren();
+      for ( i = 0, n = children.length; i < n; i++ ) {
+        increase = Math.random() * 40 + 10;
+        decrease = -increase;
+
+        children[i].addAction(
           forever(
             sequence(
               lengthBy( increase, Math.random() * 1000 + 1000, Interpolation.quintOut ),
@@ -76,8 +89,8 @@ define(
               lengthBy( decrease, Math.random() * 1000 + 1000, Interpolation.quad )
             )
           )
-        )
-      );
+        );
+      }
     };
 
     World.prototype.draw = function( ctx ) {
