@@ -38,7 +38,7 @@ define(
                        .setEndAngle( startAngle + angle )
                        .setLength( -this._outerLength * Math.random() )
                        .setColor( this._arcColor ); // Negative, towards center.
-        outerEntity.addObject( arc );
+        outerEntity.addChild( arc );
 
         // Create inner arc.
         arc = new Arc().setDistance( this._innerRadius )
@@ -46,7 +46,7 @@ define(
                        .setEndAngle( startAngle + angle )
                        .setLength( this._innerLength * Math.random() )
                        .setColor( this._arcColor );
-        innerEntity.addObject( arc );
+        innerEntity.addChild( arc );
 
         // Rotate.
         startAngle += angle;

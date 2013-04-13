@@ -1,8 +1,13 @@
 define(
-  [ '../object2d',
-    '../actions/color-action',
-    '../math/interpolation' ],
-  function( Object2D, ColorAction, Interpolation ) {
+  [ '../color',
+    '../object2d',
+    '../math/interpolation',
+    '../actions/actions' ],
+  function( Color, Object2D, Interpolation, Actions ) {
+    var color = Actions.color,
+        sequence = Actions.sequence,
+        distanceBy = Actions.distanceBy;
+
     function Arc() {
       Object2D.call( this );
 
@@ -12,9 +17,11 @@ define(
       this._length = 0.0;
 
       this.addAction(
-        new ColorAction().setEndColor( 255, 0, 0, 1.0 )
-                         .setDuration( 2000 )
-                         .setInterpolation( Interpolation.expo10 )
+        sequence(
+          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
+          distanceBy( 200, 2000, Interpolation.quadOut ),
+          distanceBy( -200, 2000, Interpolation.linear )
+        )
       );
     }
 

@@ -57,6 +57,26 @@ define(function( require ) {
         .setInterpolation( interpolation );
     },
 
+    distanceTo: function( distance, duration, interpolation ) {
+      duration = duration || 0;
+      interpolation = interpolation || null;
+
+      return new DistanceToAction()
+        .setDistance( distance )
+        .setDuration( duration )
+        .setInterpolation( interpolation );
+    },
+
+    distanceBy: function( distanceAmount, duration, interpolation ) {
+      duration = duration || 0;
+      interpolation = interpolation || null;
+
+      return new DistanceByAction()
+        .setAmount( distanceAmount )
+        .setDuration( duration )
+        .setInterpolation( interpolation );
+    },
+
     color: function( color, duration, interpolation ) {
       duration = duration || 0;
       interpolation = interpolation || null;

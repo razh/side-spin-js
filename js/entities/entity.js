@@ -42,7 +42,7 @@ define(
     };
 
     Entity.prototype.getChildren = function() {
-      return this._objects;
+      return this._children;
     };
 
     Entity.prototype.addChild = function( child ) {
