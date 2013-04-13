@@ -4,9 +4,7 @@ define(
     '../math/interpolation',
     '../actions/actions' ],
   function( Color, Object2D, Interpolation, Actions ) {
-    var color = Actions.color,
-        sequence = Actions.sequence,
-        distanceBy = Actions.distanceBy;
+    var color = Actions.color;
 
     function Arc() {
       Object2D.call( this );
@@ -17,11 +15,7 @@ define(
       this._length = 0.0;
 
       this.addAction(
-        sequence(
-          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
-          distanceBy( 200, 2000, Interpolation.quadOut ),
-          distanceBy( -200, 2000, Interpolation.linear )
-        )
+        color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 )
       );
     }
 

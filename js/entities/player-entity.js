@@ -7,7 +7,9 @@ define(
   function( PhysicsEntity, Color, Interpolation, Actions, Circle ) {
     var color = Actions.color,
         delay = Actions.delay,
-        remove = Actions.remove;
+        remove = Actions.remove,
+        sequence = Actions.sequence,
+        distanceBy = Actions.distanceBy;
 
     function PlayerEntity() {
       PhysicsEntity.call( this );
@@ -20,6 +22,13 @@ define(
         delay( 1000 ),
         color( new Color( 0, 0, 127, 1.0 ), 1000, Interpolation.quad ),
         remove()
+      );
+
+      this.addAction(
+          sequence(
+            distanceBy( 200, 200, Interpolation.quadOut ),
+            distanceBy( -200, 500, Interpolation.linear )
+          )
       );
     }
 
