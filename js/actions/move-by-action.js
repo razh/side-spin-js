@@ -39,6 +39,7 @@ define(
 
     MoveByAction.prototype.setAmountY = function( y ) {
       this._amountY = y;
+      return this;
     };
 
     MoveByAction.prototype.clone = function() {

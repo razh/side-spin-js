@@ -121,7 +121,6 @@ define(
     TemporalAction.prototype.set = function( action ) {
       return Action.prototype.set.call( this, action )
         .setDuration( action.getDuration() )
-        .setTime( action.getTime() )
         .setInterpolation( action.getInterpolation() )
         .setReverse( action.isReverse() );
     };
@@ -130,7 +129,6 @@ define(
       if ( action instanceof TemporalAction ) {
         return Action.prototype.equals.call( this, action )          &&
                action.getDuration()      === this.getDuration()      &&
-               action.getTime()          === this.getTime()          &&
                action.getInterpolation() === this.getInterpolation() &&
                action.isReverse()        === this.isReverse();
       }

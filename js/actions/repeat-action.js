@@ -61,6 +61,7 @@ define(
 
     RepeatAction.prototype.setCount = function( count ) {
       this._repeatCount = count;
+      return this;
     };
 
     RepeatAction.prototype.clone = function() {

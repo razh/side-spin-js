@@ -77,9 +77,10 @@ define(
 
     Game.prototype.removeObject = function( object ) {
       var objects = this.getObjects();
-      var index = object.indexOf( object );
+      var index = objects.indexOf( object );
       if ( index !== -1 ) {
-        objects.splice( index, 1 ).setParent( null );
+        objects.splice( index, 1 );
+        object.setParent( null );
       }
     };
 

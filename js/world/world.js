@@ -7,10 +7,14 @@ define(
   function( Color, Object2D, PhysicsEntity, Actions, Interpolation ) {
     var PI2 = 2 * Math.PI;
 
-    var moveBy   = Actions.moveBy,
-        sequence = Actions.sequence;
-        var delay = Actions.delay;
-        var removeObject = Actions.removeObject;
+    var color = Actions.color,
+        moveBy = Actions.moveBy,
+        sequence = Actions.sequence,
+        delay = Actions.delay,
+        forever = Actions.forever,
+        lengthTo = Actions.lengthTo,
+        removeObject = Actions.removeObject;
+
     // World
     // -----
     // A world is made up of two entities (outer and inner) which
@@ -36,6 +40,34 @@ define(
           moveBy(    0, -200, 1000, Interpolation.linear ),
           moveBy( -200,  200, 1000, Interpolation.linear ),
           moveBy(    0, -200, 1000, Interpolation.linear )
+        )
+      );
+
+      this._outerEntity.addActionToChildren(
+        sequence(
+          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
+          forever(
+            sequence(
+              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.quintOut ),
+              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.expo5 ),
+              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.expo5In ),
+              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.quad )
+            )
+          )
+        )
+      );
+
+      this._outerEntity.addActionToChildren(
+        sequence(
+          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
+          forever(
+            sequence(
+              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.quintOut ),
+              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.expo5 ),
+              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.expo5In ),
+              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.quad )
+            )
+          )
         )
       );
     }

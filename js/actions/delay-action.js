@@ -65,8 +65,7 @@ define(
 
     DelayAction.prototype.set = function( action ) {
       return DelegateAction.prototype.set.call( this, action )
-        .setDuration( action.getDuration() )
-        .setTime( action.getTime() );
+        .setDuration( action.getDuration() );
     };
 
     DelayAction.prototype.equals = function( action ) {

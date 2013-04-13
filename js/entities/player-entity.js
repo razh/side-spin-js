@@ -7,7 +7,6 @@ define(
   function( PhysicsEntity, Color, Interpolation, Actions, Circle ) {
     var color = Actions.color,
         delay = Actions.delay,
-        remove = Actions.remove,
         sequence = Actions.sequence,
         distanceBy = Actions.distanceBy;
 
@@ -18,10 +17,9 @@ define(
                                  .setColor( 172, 191, 204, 1.0 ) );
       this.setAngularVelocity( 60 * Math.PI / 180 );
 
-      this.addAction(
+      this.addActionToChildren(
         delay( 1000 ),
-        color( new Color( 0, 0, 127, 1.0 ), 1000, Interpolation.quad ),
-        remove()
+        color( new Color( 0, 0, 127, 1.0 ), 1000, Interpolation.quad )
       );
 
       this.addAction(

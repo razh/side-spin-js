@@ -8,6 +8,8 @@ define(function( require ) {
       DelayAction      = require( './delay-action'       ),
       DistanceByAction = require( './distance-by-action' ),
       DistanceToAction = require( './distance-to-action' ),
+      LengthByAction   = require( './length-by-action'   ),
+      LengthToAction   = require( './length-to-action'   ),
       MoveByAction     = require( './move-by-action'     ),
       MoveToAction     = require( './move-to-action'     ),
       ParallelAction   = require( './parallel-action'    ),
@@ -73,6 +75,26 @@ define(function( require ) {
 
       return new DistanceByAction()
         .setAmount( distanceAmount )
+        .setDuration( duration )
+        .setInterpolation( interpolation );
+    },
+
+    lengthBy: function( lengthAmount, duration, interpolation ) {
+      duration = duration || 0;
+      interpolation = interpolation || null;
+
+      return new LengthByAction()
+        .setAmount( lengthAmount )
+        .setDuration( duration )
+        .setInterpolation( interpolation );
+    },
+
+    lengthTo: function( length, duration, interpolation ) {
+      duration = duration || 0;
+      interpolation = interpolation || null;
+
+      return new LengthToAction()
+        .setLength( length )
         .setDuration( duration )
         .setInterpolation( interpolation );
     },

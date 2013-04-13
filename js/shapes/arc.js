@@ -4,7 +4,10 @@ define(
     '../math/interpolation',
     '../actions/actions' ],
   function( Color, Object2D, Interpolation, Actions ) {
-    var color = Actions.color;
+    var color = Actions.color,
+        forever = Actions.forever,
+        lengthTo = Actions.lengthTo,
+        sequence = Actions.sequence;
 
     function Arc() {
       Object2D.call( this );
@@ -13,10 +16,6 @@ define(
       this._endAngle   = 0.0;
 
       this._length = 0.0;
-
-      this.addAction(
-        color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 )
-      );
     }
 
     Arc.prototype = new Object2D();
@@ -68,6 +67,10 @@ define(
     Arc.prototype.setLength = function( length ) {
       this._length = length;
       return this;
+    };
+
+    Arc.prototype.lengthen = function( length ) {
+      return this.setLength( this.getLength() + length );
     };
 
     return Arc;
