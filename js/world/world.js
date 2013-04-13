@@ -2,10 +2,14 @@ define(
   [ '../color',
     '../object2d',
     '../entities/physics-entity',
-    '../actions/move-by-action',
+    '../actions/actions',
     '../math/interpolation' ],
-  function( Color, Object2D, PhysicsEntity, MoveByAction, Interpolation ) {
+  function( Color, Object2D, PhysicsEntity, Actions, Interpolation ) {
     var PI2 = 2 * Math.PI;
+
+    var moveBy   = Actions.moveBy,
+        sequence = Actions.sequence;
+        var delay = Actions.delay;
     // World
     // -----
     // A world is made up of two entities (outer and inner) which
@@ -25,9 +29,13 @@ define(
       this._backgroundColor = new Color( 127, 127, 127, 1.0 );
 
       this.addAction(
-        new MoveByAction().setAmount( 200, 200 )
-                          .setDuration( 2000 )
-                          .setInterpolation( Interpolation.quad )
+        sequence(
+          delay( 2000 ),
+          moveBy(  200,  200, 1000, Interpolation.quad ),
+          moveBy(    0, -200, 1000, Interpolation.linear ),
+          moveBy( -200,  200, 1000, Interpolation.linear ),
+          moveBy(    0, -200, 1000, Interpolation.linear )
+        )
       );
     }
 

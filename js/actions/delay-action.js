@@ -1,6 +1,6 @@
 // From libgdx.
 define(
-  [ './delegate-action.js' ],
+  [ './delegate-action' ],
   function( DelegateAction ) {
 
     function DelayAction() {
@@ -10,7 +10,7 @@ define(
       this._time = 0.0;
     }
 
-    DelayAction.prototype = new DelayAction();
+    DelayAction.prototype = new DelegateAction();
     DelayAction.prototype.constructor = DelayAction;
 
     DelayAction.prototype.act = function( delta ) {
@@ -23,11 +23,11 @@ define(
         delta = this._time - this._duration;
       }
 
-      if ( this.getAction() !== null ) {
+      if ( this.getAction() === null ) {
         return true;
       }
 
-      return Action.prototype.act.call( delta );
+      return this.getAction().act( delta );
     };
 
     DelayAction.prototype.finish = function() {
@@ -58,5 +58,7 @@ define(
       this._time = time;
       return this;
     };
+
+    return DelayAction;
   }
 );

@@ -1,7 +1,5 @@
 define(
-  [ '../util' ],
-  function( Util ) {
-
+  function() {
     // From libgdx.
     function pow( power ) {
       return function( a ) {

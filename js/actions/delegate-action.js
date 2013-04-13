@@ -9,6 +9,9 @@ define(
       this._action = null;
     }
 
+    DelegateAction.prototype = new Action();
+    DelegateAction.prototype.constructor = DelegateAction;
+
     DelegateAction.prototype.getAction = function() {
       return this._action;
     };
@@ -36,5 +39,7 @@ define(
 
       return Action.prototype.setObject.call( this, object );
     };
+
+    return DelegateAction;
   }
 );

@@ -20,7 +20,7 @@ define(
 
     MoveByAction.prototype.setAmount = function( x , y ) {
       this.setAmountX(x);
-      this.setAmountY(x);
+      this.setAmountY(y);
       return this;
     };
 

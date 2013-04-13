@@ -59,11 +59,13 @@ define(
         actions[i].setObject( object );
       }
 
-      Action.prototype.setObject.call( object );
+      Action.prototype.setObject.call( this, object );
     };
 
     ParallelAction.prototype.getActions = function() {
       return this._actions;
     };
+
+    return ParallelAction;
   }
 );
