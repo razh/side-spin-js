@@ -79,8 +79,7 @@ define(
       var objects = this.getObjects();
       var index = objects.indexOf( object );
       if ( index !== -1 ) {
-        objects.splice( index, 1 );
-        object.setParent( null );
+        objects.splice( index, 1 )[0].setParent( null );
       }
     };
 

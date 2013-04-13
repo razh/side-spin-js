@@ -12,7 +12,7 @@ define(
         sequence = Actions.sequence,
         delay = Actions.delay,
         forever = Actions.forever,
-        lengthTo = Actions.lengthTo,
+        lengthBy = Actions.lengthBy,
         removeObject = Actions.removeObject;
 
     // World
@@ -32,7 +32,12 @@ define(
       this._innerRadius = 128.0;
 
       this._backgroundColor = new Color( 127, 127, 127, 1.0 );
+    }
 
+    World.prototype = new Object2D();
+    World.prototype.constructor = World;
+
+    World.prototype.addTestActions = function() {
       this.addAction(
         sequence(
           delay( 2000 ),
@@ -43,37 +48,37 @@ define(
         )
       );
 
-      this._outerEntity.addActionToChildren(
-        sequence(
-          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
-          forever(
-            sequence(
-              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.quintOut ),
-              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.expo5 ),
-              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.expo5In ),
-              lengthTo( Math.random() * 40 + 20, Math.random() * 1000 + 1000, Interpolation.quad )
-            )
-          )
-        )
-      );
+      var increase = Math.random() * 40 + 10,
+          decrease = -increase;
 
       this._outerEntity.addActionToChildren(
         sequence(
           color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
           forever(
             sequence(
-              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.quintOut ),
-              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.expo5 ),
-              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.expo5In ),
-              lengthTo( Math.random() * -40 - 20, Math.random() * 1000 + 1000, Interpolation.quad )
+              lengthBy( decrease, Math.random() * 1000 + 1000, Interpolation.quintOut ),
+              lengthBy( increase, Math.random() * 1000 + 1000, Interpolation.expo5 ),
+              lengthBy( decrease, Math.random() * 1000 + 1000, Interpolation.expo5In ),
+              lengthBy( increase, Math.random() * 1000 + 1000, Interpolation.quad )
             )
           )
         )
       );
-    }
 
-    World.prototype = new Object2D();
-    World.prototype.constructor = World;
+      this._innerEntity.addActionToChildren(
+        sequence(
+          color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 ),
+          forever(
+            sequence(
+              lengthBy( increase, Math.random() * 1000 + 1000, Interpolation.quintOut ),
+              lengthBy( decrease, Math.random() * 1000 + 1000, Interpolation.expo5 ),
+              lengthBy( increase, Math.random() * 1000 + 1000, Interpolation.expo5In ),
+              lengthBy( decrease, Math.random() * 1000 + 1000, Interpolation.quad )
+            )
+          )
+        )
+      );
+    };
 
     World.prototype.draw = function( ctx ) {
       ctx.save();

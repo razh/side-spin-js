@@ -52,6 +52,8 @@ define(
         startAngle += angle;
       }
 
+      world.addTestActions();
+
       return world;
     };
 

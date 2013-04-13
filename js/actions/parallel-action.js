@@ -71,14 +71,14 @@ define(
     };
 
     ParallelAction.prototype.set = function( action ) {
-      action = Action.prototype.set.call( this, action );
+      Action.prototype.set.call( this, action );
 
-      var actions = this.getActions();
+      var actions = action.getActions();
       for ( var i = 0, n = actions.length; i < n; i++ ) {
-        action.addAction( actions[i].clone() );
+        this.addAction( actions[i].clone() );
       }
 
-      return action;
+      return this;
     };
 
     ParallelAction.prototype.equals = function( action ) {

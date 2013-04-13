@@ -30,7 +30,7 @@ define(function() {
    * Sets this action equal to the given action.
    */
   Action.prototype.set = function( action ) {
-    return action;
+    return this;
   };
 
   // Allows us to check if actions from different objects are equal.

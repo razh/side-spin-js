@@ -12,7 +12,7 @@ define(
     LengthByAction.prototype.constructor = LengthByAction;
 
     LengthByAction.prototype.updateRelative = function( percentDelta ) {
-      this.getObject().lengthen( this.getObject().getLength() + this._amount * percentDelta );
+      this.getObject().lengthen( this._amount * percentDelta );
     };
 
     LengthByAction.prototype.getAmount = function() {

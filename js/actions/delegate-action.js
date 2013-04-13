@@ -45,13 +45,13 @@ define(
     };
 
     DelegateAction.prototype.set = function( action ) {
-      action = Action.prototype.set.call( this, action );
+      Action.prototype.set.call( this, action );
 
       if ( action.getAction() !== null ) {
         this.setAction( action.getAction().clone() );
       }
 
-      return action;
+      return this;
     };
 
     DelegateAction.prototype.equals = function( action ) {

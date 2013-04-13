@@ -55,8 +55,7 @@ define(
       var children = this.getChildren();
       var index = children.indexOf( child );
       if ( index !== -1 ) {
-        children.splice( index, 1 );
-        child.setParent( null );
+        children.splice( index, 1 )[0].setParent( null );
       }
 
       return this;
@@ -79,7 +78,7 @@ define(
         actions = children[i].getActions();
         for ( j = 0, jl = actions.length; j < jl; j++ ) {
           if ( actions[j].equals( action ) ) {
-            actions.splice( j, 1 ).setObject( null );
+            actions.splice( j, 1 )[0].setObject( null );
             j--;
             jl--;
           }
