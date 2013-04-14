@@ -10,11 +10,11 @@ define(
     function WorldBuilder() {
       this._count = 32;
 
-      this._outerRadius  = 288.0;
-      this._innerRadius  = 144.0;
+      this._outerRadius  = 384.0;
+      this._innerRadius  = 48.0;
 
-      this._outerLength = 24.0;
-      this._innerLength = 24.0;
+      this._outerLength = 144.0;
+      this._innerLength = 144.0;
 
       this._arcColor = new Color();
     }

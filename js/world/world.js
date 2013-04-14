@@ -25,7 +25,7 @@ define(
       this._outerEntity = new PhysicsEntity();
       this._innerEntity = new PhysicsEntity();
 
-      this._outerEntity.setAngularVelocity( 30 * Math.PI / 180 );
+      this._outerEntity.setAngularVelocity( -30 * Math.PI / 180 );
       this._innerEntity.setAngularVelocity( -30 * Math.PI / 180 );
 
       this._outerRadius = 256.0;
@@ -40,11 +40,11 @@ define(
     World.prototype.addTestActions = function() {
       this.addAction(
         sequence(
-          delay( 2000 ),
-          moveBy(  200,  200, 1000, Interpolation.quad ),
-          moveBy(    0, -200, 1000, Interpolation.linear ),
-          moveBy( -200,  200, 1000, Interpolation.linear ),
-          moveBy(    0, -200, 1000, Interpolation.linear )
+          delay( 1000 ),
+          moveBy(  200,  200, 100, Interpolation.quad ),
+          moveBy(    0, -200, 100, Interpolation.linear ),
+          moveBy( -200,  200, 100, Interpolation.linear ),
+          moveBy(    0, -200, 100, Interpolation.linear )
         )
       );
 
@@ -120,6 +120,22 @@ define(
 
       this._outerEntity.act( delta );
       this._innerEntity.act( delta );
+    };
+
+    World.prototype.ensureSpacing = function( spacing ) {
+      var outerChildren = this._outerEntity.getChildren(),
+          innerChildren = this._innerEntity.getChildren();
+
+      var segmentCount = Math.max( innerChildren.length, outerChildren.length );
+      // Calculate offset.
+      var angleOffset = this._outerEntity.getAngle() - this._innerEntity.getAngle(),
+          indexOffset = Math.floor( angleOffset / segmentCount );
+          ratio = innerChildren.length / outerChildren.length;
+
+      var outerChild, innerChild;
+      for ( var i = 0; i < segmentCount; i++ ) {
+
+      }
     };
 
     // Entities.

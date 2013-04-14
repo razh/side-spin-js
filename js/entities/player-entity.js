@@ -46,11 +46,11 @@ define(
 
       var radialVelocity = 0;
       if ( Game.instance.input.keys[ 37 ] ) {
-        radialVelocity -= 200;
+        radialVelocity -= 300;
       }
 
       if ( Game.instance.input.keys[ 39 ] ) {
-        radialVelocity += 200;
+        radialVelocity += 300;
       }
 
       this.setRadialVelocity( radialVelocity );
