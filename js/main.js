@@ -21,7 +21,6 @@ require(
 
       world.setBackgroundColor( _game.getBackgroundColor() );
       _game.addObject( world );
-      console.log( world );
 
       _game._player = new PlayerEntity()
         .setPosition( 0.25 * _game.WIDTH, 0.25 * _game.HEIGHT )
@@ -29,7 +28,17 @@ require(
         .setWorld( world );
       _game.addObject( _game._player );
 
-      _game._canvas.addEventListener( 'mousedown', Input.onMouseDown, null );
+      if ( 'ontouchstart' in window ) {
+        document.addEventListener( 'touchstart', Input.onTouchStart, null );
+        document.addEventListener( 'touchmove', Input.onTouchMove, null );
+        document.addEventListener( 'touchend', Input.onTouchEnd, null );
+        document.addEventListener( 'touchcancel', Input.onTouchCancel, null );
+      } else {
+        document.addEventListener( 'mousedown', Input.onMouseDown, null );
+        document.addEventListener( 'mouseup', Input.onMouseUp, null );
+      }
+
+
       document.addEventListener( 'keydown', Input.onKeyDown, null );
       document.addEventListener( 'keyup', Input.onKeyUp, null );
 

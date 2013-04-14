@@ -1,15 +1,31 @@
 define(
   [ 'game' ],
   function( Game ) {
+
+    function transformCoords( x, y ) {
+      return {
+        x: x - Game.instance._canvas.offsetLeft,
+        y: Game.instance.HEIGHT - ( y - Game.instance._canvas.offsetTop )
+      };
+    }
+
     return {
       onMouseDown: function( event ) {
         var input = transformCoords( event.pageX, event.pageY );
 
         if ( input.x < 0.5 * Game.instance.WIDTH ) {
+          Game.instance.input.keys[ 37 ] = true;
           console.log( 'left' );
         } else {
+          Game.instance.input.keys[ 39 ] = true;
           console.log( 'right' );
         }
+      },
+
+      onMouseUp: function( event ) {
+        console.log( 'mouseup' );
+        Game.instance.input.keys[ 37 ] = false;
+        Game.instance.input.keys[ 39 ] = false;
       },
 
       onKeyDown: function( event ) {
@@ -27,20 +43,23 @@ define(
         Game.instance.input.keys[ event.which ] = false;
       },
 
-      onTouchStart: function( event ) {},
+      onTouchStart: function( event ) {
+        event.preventDefault();
+      },
 
-      onTouchMove: function( event ) {},
+      onTouchMove: function( event ) {
+        event.preventDefault();
+      },
 
-      onTouchEnd: function( event ) {},
+      onTouchEnd: function( event ) {
+        event.preventDefault();
+      },
 
-      onTouchCancel: function( event ) {},
+      onTouchCancel: function( event ) {
+        event.preventDefault();
+      },
 
-      transformCoords: function( x, y ) {
-        return {
-          x: x - Game.instance._canvas.offsetLeft,
-          y: Game.instance.HEIGHT - ( y - Game.instance._canvas.offsetTop )
-        };
-      }
+      transformCoords: transformCoords
     };
   }
 );

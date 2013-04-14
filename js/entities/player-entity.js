@@ -44,6 +44,10 @@ define(
     PlayerEntity.prototype.act = function( delta ) {
       PhysicsEntity.prototype.act.call( this, delta );
 
+      if ( this.getDistance() < 0 ) {
+        this.setDistance(0);
+      }
+
       var radialVelocity = 0;
       if ( Game.instance.input.keys[ 37 ] ) {
         radialVelocity -= 300;

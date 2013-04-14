@@ -42,8 +42,8 @@ define(
       var delta = this._currTime - this._prevTime;
       this._prevTime = this._currTime;
 
-      if ( delta > 1e3 ) {
-        delta = 1e3;
+      if ( delta > 1e2 ) {
+        delta = 1e2;
       }
 
       var objects = this.getObjects();
