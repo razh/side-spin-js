@@ -45,14 +45,22 @@ define(
     // Does not take into account x, y coordinates of parent.
     Arc.prototype.intersectsCircle = function( angle, distance, radius ) {
       if ( this._startAngle <= angle && angle <= this._endAngle ) {
+        var arcDistance = this.getDistance(),
+            arcLength = this.getLength();
         // Distance from circle to this.
-        var difference = this.getDistance() - distance;
+        var difference = arcDistance - distance;
         // Check if both ends are intersecting the circle.
         if ( Math.abs( difference ) < radius ) {
           return true;
         }
 
-        if ( Math.abs( difference + this._length ) < radius ) {
+        if ( Math.abs( difference + arcLength ) < radius ) {
+          return true;
+        }
+
+        // Check if middle is intersecting.
+        if ( arcDistance <= distance && distance <= arcDistance + arcLength ||
+             arcDistance + arcLength <= distance && distance <= arcDistance ) {
           return true;
         }
       }
