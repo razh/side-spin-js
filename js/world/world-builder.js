@@ -10,8 +10,8 @@ define(
     function WorldBuilder() {
       this._count = 32;
 
-      this._outerRadius  = 256.0;
-      this._innerRadius  = 128.0;
+      this._outerRadius  = 288.0;
+      this._innerRadius  = 144.0;
 
       this._outerLength = 24.0;
       this._innerLength = 24.0;

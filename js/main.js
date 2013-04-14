@@ -21,14 +21,15 @@ require(
       _game.addObject( world );
       console.log( world );
 
-      var player = new PlayerEntity()
+      _game._player = new PlayerEntity()
         .setPosition( 0.5 * _game.WIDTH, 0.5 * _game.HEIGHT )
         .setDistance( 192.0 )
         .setWorld( world );
-      _game.addObject( player );
+      _game.addObject( _game._player );
 
       _game._canvas.addEventListener( 'mousedown', Input.onMouseDown, null );
       document.addEventListener( 'keydown', Input.onKeyDown, null );
+      document.addEventListener( 'keyup', Input.onKeyUp, null );
 
       loop();
     }

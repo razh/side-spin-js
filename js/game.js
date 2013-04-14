@@ -22,6 +22,10 @@ define(
 
       this._objects = [];
 
+      this.input = {
+        keys: []
+      };
+
       this.EPSILON = 1e-5;
     }
 

@@ -12,13 +12,18 @@ define(
     }
 
     function onKeyDown( event ) {
-      console.log( event.which )
+      Game.instance.input.keys[ event.which ] = true;
+
       switch( event.which ) {
         // q.
         case 81:
           Game.instance.stop();
           break;
       }
+    }
+
+    function onKeyUp( event ) {
+      Game.instance.input.keys[ event.which ] = false;
     }
 
     function transformCoords( x, y ) {
@@ -31,6 +36,7 @@ define(
     return {
       onMouseDown: onMouseDown,
       onKeyDown: onKeyDown,
+      onKeyUp: onKeyUp,
       transformCoords: transformCoords
     };
   }

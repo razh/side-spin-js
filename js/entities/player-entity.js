@@ -1,10 +1,11 @@
 define(
-  [ './physics-entity',
+  [ '../game',
+    './physics-entity',
     '../color',
     '../math/interpolation',
     '../actions/actions',
     '../shapes/circle' ],
-  function( PhysicsEntity, Color, Interpolation, Actions, Circle ) {
+  function( Game, PhysicsEntity, Color, Interpolation, Actions, Circle ) {
     var color = Actions.color,
         delay = Actions.delay,
         sequence = Actions.sequence,
@@ -20,7 +21,7 @@ define(
         .setColor( 172, 191, 204, 1.0 );
 
       this.addChild( this._circle );
-      this.setAngularVelocity( 60 * Math.PI / 180 );
+      // this.setAngularVelocity( 20 * Math.PI / 180 );
 
       this.addActionToChildren(
         delay( 1000 ),
@@ -43,6 +44,18 @@ define(
     PlayerEntity.prototype.act = function( delta ) {
       PhysicsEntity.prototype.act.call( this, delta );
 
+      var radialVelocity = 0;
+      if ( Game.instance.input.keys[ 37 ] ) {
+        radialVelocity -= 200;
+      }
+
+      if ( Game.instance.input.keys[ 39 ] ) {
+        radialVelocity += 200;
+      }
+
+      this.setRadialVelocity( radialVelocity );
+
+      // Check if collides with world.
       var world = this.getWorld();
       if ( world === null ) {
         return;
