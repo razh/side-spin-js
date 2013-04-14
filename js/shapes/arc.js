@@ -42,6 +42,24 @@ define(
       ctx.stroke();
     };
 
+    // Does not take into account x, y coordinates of parent.
+    Arc.prototype.intersectsCircle = function( angle, distance, radius ) {
+      if ( this._startAngle <= angle && angle <= this._endAngle ) {
+        // Distance from circle to this.
+        var difference = this.getDistance() - distance;
+        // Check if both ends are intersecting the circle.
+        if ( Math.abs( difference ) < radius ) {
+          return true;
+        }
+
+        if ( Math.abs( difference + this._length ) < radius ) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
     Arc.prototype.getStartAngle = function() {
       return this._startAngle;
     };

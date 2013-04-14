@@ -13,8 +13,11 @@ define(
     function PlayerEntity() {
       PhysicsEntity.call( this );
 
-      this.addChild( new Circle().setRadius( 20 )
-                                 .setColor( 172, 191, 204, 1.0 ) );
+      this._circle = new Circle()
+        .setRadius( 20 )
+        .setColor( 172, 191, 204, 1.0 );
+
+      this.addChild( this._circle );
       this.setAngularVelocity( 60 * Math.PI / 180 );
 
       this.addActionToChildren(
@@ -28,10 +31,49 @@ define(
             distanceBy( -200, 500, Interpolation.linear )
           )
       );
+
+      this._world = null;
     }
 
     PlayerEntity.prototype = new PhysicsEntity();
     PlayerEntity.prototype.constructor = PlayerEntity;
+
+    PlayerEntity.prototype.act = function( delta ) {
+      PhysicsEntity.prototype.act.call( this, delta );
+
+      var world = this.getWorld();
+      if ( world === null ) {
+        return;
+      }
+
+      var outerEntity = world.getOuterEntity(),
+          innerEntity = world.getInnerEntity(),
+          children = outerEntity.getChildren();
+
+      var angle = this.getAngle() - outerEntity.getAngle();
+      var child;
+      var i, n;
+      for ( i = 0, n = children.length; i < n; i++ ) {
+        child = children[i];
+
+        child.setColor( 255, 0, 0, 1.0 );
+        if ( child.intersectsCircle( angle, this.getDistance(), this._circle.getRadius() ) ) {
+          child.setColor( 0, 255, 0, 1.0 );
+        }
+      }
+
+      children = innerEntity.getChildren();
+      angle = this.getAngle() - innerEntity.getAngle();
+      for ( i = 0, n = children.length; i < n; i++ ) {
+        child = children[i];
+
+        child.setColor( 255, 0, 0, 1.0 );
+        if ( child.intersectsCircle( angle, this.getDistance(), this._circle.getRadius() ) ) {
+          child.setColor( 0, 255, 0, 1.0 );
+        }
+
+      }
+    };
 
     PlayerEntity.prototype.draw = function( ctx ) {
       if ( !this.isVisible() ) {
@@ -47,6 +89,15 @@ define(
       this.drawChildren( ctx );
 
       ctx.restore();
+    };
+
+    PlayerEntity.prototype.getWorld = function() {
+      return this._world;
+    };
+
+    PlayerEntity.prototype.setWorld = function( world ) {
+      this._world = world;
+      return this;
     };
 
     return PlayerEntity;

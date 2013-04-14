@@ -1,6 +1,8 @@
 define(
   [ 'color' ],
   function( Color ) {
+    var PI2 = 2 * Math.PI;
+
     function Object2D() {
       this._position = {
         x: 0.0,
@@ -130,7 +132,7 @@ define(
     };
 
     Object2D.prototype.setAngle = function( angle ) {
-      this._angle = angle % 360;
+      this._angle = angle % PI2;
       return this;
     };
 
