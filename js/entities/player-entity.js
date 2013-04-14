@@ -10,6 +10,8 @@ define(
         sequence = Actions.sequence,
         distanceBy = Actions.distanceBy;
 
+    var PI2 = 2 * Math.PI;
+
     function PlayerEntity() {
       PhysicsEntity.call( this );
 
@@ -50,7 +52,11 @@ define(
           innerEntity = world.getInnerEntity(),
           children = outerEntity.getChildren();
 
-      var angle = this.getAngle() - outerEntity.getAngle();
+      var angle = ( this.getAngle() - outerEntity.getAngle() ) % PI2;
+      if ( angle < 0 ) {
+        angle += PI2;
+      }
+
       var child;
       var i, n;
       for ( i = 0, n = children.length; i < n; i++ ) {
@@ -63,7 +69,11 @@ define(
       }
 
       children = innerEntity.getChildren();
-      angle = this.getAngle() - innerEntity.getAngle();
+      angle = ( this.getAngle() - innerEntity.getAngle() ) % PI2;
+      if ( angle < 0 ) {
+        angle += PI2;
+      }
+
       for ( i = 0, n = children.length; i < n; i++ ) {
         child = children[i];
 
