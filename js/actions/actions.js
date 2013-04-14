@@ -13,6 +13,8 @@ define(function( require ) {
       MoveByAction     = require( './move-by-action'     ),
       MoveToAction     = require( './move-to-action'     ),
       ParallelAction   = require( './parallel-action'    ),
+      RadiusByAction   = require( './radius-by-action'   ),
+      RadiusToAction   = require( './radius-to-action'   ),
       RemoveAction     = require( './remove-action'      );
       RepeatAction     = require( './repeat-action'      );
       SequenceAction   = require( './sequence-action'    ),
@@ -95,6 +97,26 @@ define(function( require ) {
 
       return new LengthToAction()
         .setLength( length )
+        .setDuration( duration )
+        .setInterpolation( interpolation );
+    },
+
+    radiusBy: function( radiusAmount, duration, interpolation ) {
+      duration = duration || 0;
+      interpolation = interpolation || null;
+
+      return new RadiusByAction()
+        .setAmount( radiusAmount )
+        .setDuration( duration )
+        .setInterpolation( interpolation );
+    },
+
+    radiusTo: function( radius, duration, interpolation ) {
+      duration = duration || 0;
+      interpolation = interpolation || null;
+
+      return new RadiusToAction()
+        .setRadius( radius )
         .setDuration( duration )
         .setInterpolation( interpolation );
     },
