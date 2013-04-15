@@ -23,7 +23,6 @@ define(
       },
 
       onMouseUp: function( event ) {
-        console.log( 'mouseup' );
         Game.instance.input.keys[ 37 ] = false;
         Game.instance.input.keys[ 39 ] = false;
       },

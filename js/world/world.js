@@ -25,7 +25,7 @@ define(
       this._outerEntity = new PhysicsEntity();
       this._innerEntity = new PhysicsEntity();
 
-      this._outerEntity.setAngularVelocity( -30 * Math.PI / 180 );
+      this._outerEntity.setAngularVelocity( 30 * Math.PI / 180 );
       this._innerEntity.setAngularVelocity( -30 * Math.PI / 180 );
 
       this._outerRadius = 256.0;
@@ -120,21 +120,48 @@ define(
 
       this._outerEntity.act( delta );
       this._innerEntity.act( delta );
+
+      this.ensureSpacing();
     };
 
     World.prototype.ensureSpacing = function( spacing ) {
       var outerChildren = this._outerEntity.getChildren(),
           innerChildren = this._innerEntity.getChildren();
 
-      var segmentCount = Math.max( innerChildren.length, outerChildren.length );
-      // Calculate offset.
+      var outerCount = outerChildren.length,
+          innerCount = innerChildren.length;
+
+      // Calculate offset and gear ratio.
       var angleOffset = this._outerEntity.getAngle() - this._innerEntity.getAngle(),
-          indexOffset = Math.floor( angleOffset / segmentCount );
+          indexOffset = angleOffset * outerCount / PI2,
           ratio = innerChildren.length / outerChildren.length;
 
-      var outerChild, innerChild;
-      for ( var i = 0; i < segmentCount; i++ ) {
+      var outerChild, innerChild,
+          outerIndex;
+      var r, g, b, a;
+      for ( var i = 0; i < innerCount; i++ ) {
+        // The
+        outerIndex = Math.floor( i * ratio - indexOffset ) % outerCount;
+        if ( outerIndex < 0 ) {
+          outerIndex += outerCount;
+        }
 
+        innerChild = innerChildren[i];
+        outerChild = outerChildren[ outerIndex ];
+
+        r = Math.floor( Math.cos( innerChild.getStartAngle() ) * 255 );
+        g = Math.floor( Math.sin( innerChild.getEndAngle() ) * 248 );
+        b = Math.floor( Math.sin( innerChild.getEndAngle() ) * 184 );
+        a = 1.0;
+
+        if ( i === 0 ) {
+          r = 0;
+          g = 0;
+          b = 255;
+        }
+
+        innerChild.setColor( r, g, b, a );
+        outerChild.setColor( r, g, b, a );
       }
     };
 
