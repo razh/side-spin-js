@@ -3,7 +3,7 @@ define(
   function( Interpolation ) {
 
     /**
-      A pattern consists of a series of ordered keyframes (in a binary tree?).
+      A pattern consists of a series of ordered key frames (in a binary tree?).
       Note that it shares many similarities with libgdx's 2D Animation class.
 
       Each keyframe has:
@@ -23,7 +23,14 @@ define(
         pattern.setPlayMode();
      */
     function Pattern() {
+      // We can store the key frames in an array for now.
+      // For the low number of key frames expected (<100), it's probably
+      // better to just use an array.
+      this._keyFrames = [];
+
       this._time = 0.0;
+      this._index = 0;
+
       this._playMode = Pattern.PlayMode.NORMAL;
     }
 
@@ -34,7 +41,8 @@ define(
       LOOP_REVERSED: 3
     };
 
-    Pattern.prototype.addKeyFrame = function() {
+    Pattern.prototype.addKeyFrame = function( keyFrame ) {
+      var duration = keyFrame.getDuration();
       return this;
     };
 
