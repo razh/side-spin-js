@@ -138,7 +138,7 @@ define(
 
       var outerChild, innerChild,
           outerIndex;
-      var currentSpacing, delta, alpha;
+      var currentSpacing, delta;
       var r, g, b, a;
       for ( var i = 0; i < innerCount; i++ ) {
         // Find the corresponding arc on the outerRadius.
@@ -166,11 +166,10 @@ define(
         currentSpacing = ( outerChild.getDistance() + outerChild.getLength() ) -
                          ( innerChild.getDistance() + innerChild.getLength() );
         if ( currentSpacing < spacing ) {
-          delta = spacing - currentSpacing;
-          alpha = Math.random();
+          delta = 0.5 * ( spacing - currentSpacing );
 
-          outerChild.lengthen( alpha * delta );
-          innerChild.lengthen( ( 1 - alpha ) * -delta );
+          outerChild.lengthen(  delta );
+          innerChild.lengthen( -delta );
         }
 
         innerChild.setColor( r, g, b, a );
