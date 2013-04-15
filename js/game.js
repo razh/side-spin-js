@@ -14,7 +14,7 @@ define(
 
       this._ctx = this._canvas.getContext( '2d' );
 
-      this._backgroundColor = new Color( 127, 127, 127, 1.0 );
+      this._backgroundColor = new Color( 0, 0, 0, 1.0 );
 
       this._prevTime = Date.now();
       this._currTime = this._prevTime;

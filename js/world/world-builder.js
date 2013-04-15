@@ -8,7 +8,8 @@ define(
     // WorldBuilder
     // ------------
     function WorldBuilder() {
-      this._count = 32;
+      this._outerCount = 32;
+      this._innerCount = 32;
 
       this._outerRadius  = 384.0;
       this._innerRadius  = 48.0;
@@ -21,35 +22,43 @@ define(
 
     WorldBuilder.prototype.create = function() {
       var startAngle = 0.0,
-          angle = PI2 / this._count;
+          outerAngle = PI2 / this._outerCount,
+          innerAngle = PI2 / this._innerCount;
 
       var world = new World(),
           outerEntity = world.getOuterEntity(),
           innerEntity = world.getInnerEntity();
 
-      world.setOuterRadius( this._outerRadius )
-           .setInnerRadius( this._innerRadius );
+      // Some offsets to hide visual errors.
+      world.setOuterRadius( this._outerRadius - 1 )
+           .setInnerRadius( this._innerRadius + 1 );
 
-      var arc;
-      for ( var i = 0; i < this._count; i++ ) {
+      var arc, i;
+      for ( i = 0; i < this._outerCount; i++ ) {
         // Create outer arc.
         arc = new Arc().setDistance( this._outerRadius )
                        .setStartAngle( startAngle )
-                       .setEndAngle( startAngle + angle )
+                       .setEndAngle( startAngle + outerAngle )
                        .setLength( -this._outerLength * Math.random() )
                        .setColor( this._arcColor ); // Negative, towards center.
         outerEntity.addChild( arc );
 
+        // Rotate.
+        startAngle += outerAngle;
+      }
+
+      // Reset.
+      for ( i = 0; i < this._innerCount; i++ ) {
         // Create inner arc.
         arc = new Arc().setDistance( this._innerRadius )
                        .setStartAngle( startAngle )
-                       .setEndAngle( startAngle + angle )
+                       .setEndAngle( startAngle + innerAngle )
                        .setLength( this._innerLength * Math.random() )
                        .setColor( this._arcColor );
         innerEntity.addChild( arc );
 
         // Rotate.
-        startAngle += angle;
+        startAngle += innerAngle;
       }
 
       world.addTestActions();
@@ -58,7 +67,18 @@ define(
     };
 
     WorldBuilder.prototype.setCount = function( count ) {
-      this._count = count;
+      this.setOuterCount( count );
+      this.setInnerCount( count );
+      return this;
+    };
+
+    WorldBuilder.prototype.setOuterCount = function( outerCount ) {
+      this._outerCount = outerCount;
+      return this;
+    };
+
+    WorldBuilder.prototype.setInnerCount = function( innerCount ) {
+      this._innerCount = innerCount;
       return this;
     };
 

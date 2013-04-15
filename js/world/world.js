@@ -25,8 +25,8 @@ define(
       this._outerEntity = new PhysicsEntity();
       this._innerEntity = new PhysicsEntity();
 
-      this._outerEntity.setAngularVelocity( 30 * Math.PI / 180 );
-      this._innerEntity.setAngularVelocity( -30 * Math.PI / 180 );
+      this._outerEntity.setAngularVelocity( 40 * Math.PI / 180 );
+      this._innerEntity.setAngularVelocity( -40 * Math.PI / 180 );
 
       this._outerRadius = 256.0;
       this._innerRadius = 128.0;
@@ -134,13 +134,13 @@ define(
       // Calculate offset and gear ratio.
       var angleOffset = this._outerEntity.getAngle() - this._innerEntity.getAngle(),
           indexOffset = angleOffset * outerCount / PI2,
-          ratio = innerChildren.length / outerChildren.length;
+          ratio = outerChildren.length / innerChildren.length;
 
       var outerChild, innerChild,
           outerIndex;
-      var r, g, b, a;
+       var r, g, b, a;
       for ( var i = 0; i < innerCount; i++ ) {
-        // The
+        // Find the corresponding arc on the outerRadius.
         outerIndex = Math.floor( i * ratio - indexOffset ) % outerCount;
         if ( outerIndex < 0 ) {
           outerIndex += outerCount;
