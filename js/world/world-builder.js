@@ -58,7 +58,7 @@ define(
         innerEntity.addChild( arc );
 
         // Rotate.
-        startAngle += innerAngle;
+        startAngle -= innerAngle;
       }
 
       world.addTestActions();

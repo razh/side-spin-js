@@ -121,7 +121,7 @@ define(
       this._outerEntity.act( delta );
       this._innerEntity.act( delta );
 
-      this.ensureSpacing();
+      this.ensureSpacing( 50 );
     };
 
     World.prototype.ensureSpacing = function( spacing ) {
@@ -134,14 +134,17 @@ define(
       // Calculate offset and gear ratio.
       var angleOffset = this._outerEntity.getAngle() - this._innerEntity.getAngle(),
           indexOffset = angleOffset * outerCount / PI2,
-          ratio = outerChildren.length / innerChildren.length;
+          ratio = outerCount / innerCount;
 
       var outerChild, innerChild,
           outerIndex;
-       var r, g, b, a;
+      var currentSpacing, delta, alpha;
+      var r, g, b, a;
       for ( var i = 0; i < innerCount; i++ ) {
         // Find the corresponding arc on the outerRadius.
-        outerIndex = Math.floor( i * ratio - indexOffset ) % outerCount;
+        // Outer radius is in opposite direction of inner radius (hence the negative).
+        // The indexOffset how much we have to shift to get angleOffset.
+        outerIndex = Math.floor( i * -ratio - indexOffset ) % outerCount;
         if ( outerIndex < 0 ) {
           outerIndex += outerCount;
         }
@@ -158,6 +161,16 @@ define(
           r = 0;
           g = 0;
           b = 255;
+        }
+
+        currentSpacing = ( outerChild.getDistance() + outerChild.getLength() ) -
+                         ( innerChild.getDistance() + innerChild.getLength() );
+        if ( currentSpacing < spacing ) {
+          delta = spacing - currentSpacing;
+          alpha = Math.random();
+
+          outerChild.lengthen( alpha * delta );
+          innerChild.lengthen( ( 1 - alpha ) * -delta );
         }
 
         innerChild.setColor( r, g, b, a );

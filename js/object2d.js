@@ -132,7 +132,12 @@ define(
     };
 
     Object2D.prototype.setAngle = function( angle ) {
-      this._angle = angle % PI2;
+      angle %= PI2;
+      if ( angle < 0 ) {
+        angle += PI2;
+      }
+
+      this._angle = angle;
       return this;
     };
 

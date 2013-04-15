@@ -79,7 +79,6 @@ define(
       for ( i = 0, n = children.length; i < n; i++ ) {
         child = children[i];
 
-        // child.setColor( 255, 0, 0, 1.0 );
         if ( child.intersectsCircle( angle, this.getDistance(), this._circle.getRadius() ) ) {
           child.setColor( 0, 0, 255, 1.0 );
         }
@@ -94,7 +93,6 @@ define(
       for ( i = 0, n = children.length; i < n; i++ ) {
         child = children[i];
 
-        // child.setColor( 255, 0, 0, 1.0 );
         if ( child.intersectsCircle( angle, this.getDistance(), this._circle.getRadius() ) ) {
           child.setColor( 0, 0, 255, 1.0 );
         }
