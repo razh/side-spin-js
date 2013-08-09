@@ -1,73 +1,73 @@
-// From libgdx.
-define(
-  [ './temporal-action' ],
-  function( TemporalAction ) {
+define([
+  'actions/temporal-action'
+], function( TemporalAction ) {
+  'use strict';
 
-    function AlphaAction() {
-      TemporalAction.call( this );
+  // From libgdx.
+  function AlphaAction() {
+    TemporalAction.call( this );
 
-      this._start = 0.0;
-      this._end = 0.0;
+    this._start = 0.0;
+    this._end   = 0.0;
 
-      this._color = null;
+    this._color = null;
+  }
+
+  AlphaAction.prototype = new TemporalAction();
+  AlphaAction.prototype.constructor = AlphaAction;
+
+  AlphaAction.prototype.begin = function() {
+    if ( this._color === null ) {
+      this._color = this.getObject().getColor();
     }
 
-    AlphaAction.prototype = new TemporalAction();
-    AlphaAction.prototype.constructor = AlphaAction;
+    this._start = this._color.getAlpha();
+  };
 
-    AlphaAction.prototype.begin = function() {
-      if ( this._color === null ) {
-        this._color = this.getObject().getColor();
-      }
+  AlphaAction.prototype.update = function( percent ) {
+    this._color.setAlpha( this._start + ( this._end - this._start ) * percent );
+  };
 
-      this._start = this._color.getAlpha();
-    };
+  AlphaAction.prototype.reset = function() {
+    TemporalAction.prototype.reset.call( this );
+    this._color = null;
+  };
 
-    AlphaAction.prototype.update = function( percent ) {
-      this._color.setAlpha( this._start + ( this._end - this._start ) * percent );
-    };
+  AlphaAction.prototype.getColor = function() {
+    return this._color;
+  };
 
-    AlphaAction.prototype.reset = function() {
-      TemporalAction.prototype.reset.call( this );
-      this._color = null;
-    };
+  AlphaAction.prototype.setColor = function( color ) {
+    this._color = color;
+    return this;
+  };
 
-    AlphaAction.prototype.getColor = function() {
-      return this._color;
-    };
+  AlphaAction.prototype.getAlpha = function() {
+    return this._end;
+  };
 
-    AlphaAction.prototype.setColor = function( color ) {
-      this._color = color;
-      return this;
-    };
+  AlphaAction.prototype.setAlpha = function( alpha ) {
+    this._end = alpha;
+    return this;
+  };
 
-    AlphaAction.prototype.getAlpha = function() {
-      return this._end;
-    };
+  AlphaAction.prototype.clone = function() {
+    return new AlphaAction().set( this );
+  };
 
-    AlphaAction.prototype.setAlpha = function( alpha ) {
-      this._end = alpha;
-      return this;
-    };
+  AlphaAction.prototype.set = function( action ) {
+    return TemporalAction.prototype.set.call( this, action )
+      .setAlpha( action.getAlpha() );
+  };
 
-    AlphaAction.prototype.clone = function() {
-      return new AlphaAction().set( this );
-    };
+  AlphaAction.prototype.equals = function( action ) {
+    if ( action instanceof AlphaAction ) {
+      return TemporalAction.prototype.equals.call( this ) &&
+             action.getAlpha() === this.getAlpha();
+    }
 
-    AlphaAction.prototype.set = function( action ) {
-      return TemporalAction.prototype.set.call( this, action )
-        .setAlpha( action.getAlpha() );
-    };
+    return false;
+  };
 
-    AlphaAction.prototype.equals = function( action ) {
-      if ( action instanceof AlphaAction ) {
-        return TemporalAction.prototype.equals.call( this ) &&
-               action.getAlpha() === this.getAlpha();
-      }
-
-      return false;
-    };
-
-    return AlphaAction;
-  }
-);
+  return AlphaAction;
+});

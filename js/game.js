@@ -1,109 +1,111 @@
-define(
-  [ 'color' ],
-  function( Color ) {
-    function Game() {
-      this.WIDTH  = window.innerWidth;
-      this.HEIGHT = window.innerHeight;
+define([
+  'color'
+], function( Color ) {
+  'use strict';
 
-      this._canvas = document.createElement( 'canvas' );
+  function Game() {
+    this.WIDTH  = window.innerWidth;
+    this.HEIGHT = window.innerHeight;
 
-      this._canvas.width  = this.WIDTH;
-      this._canvas.height = this.HEIGHT;
+    this._canvas = document.createElement( 'canvas' );
 
-      document.body.appendChild( this._canvas );
+    this._canvas.width  = this.WIDTH;
+    this._canvas.height = this.HEIGHT;
 
-      this._ctx = this._canvas.getContext( '2d' );
+    document.body.appendChild( this._canvas );
 
-      this._backgroundColor = new Color( 0, 0, 0, 1.0 );
+    this._ctx = this._canvas.getContext( '2d' );
 
-      this._prevTime = Date.now();
-      this._currTime = this._prevTime;
-      this._running = true;
+    this._backgroundColor = new Color( 0, 0, 0, 1.0 );
 
-      this._objects = [];
+    this._prevTime = Date.now();
+    this._currTime = this._prevTime;
+    this._running  = true;
 
-      this.input = {
-        keys: []
-      };
+    this._objects = [];
 
-      this.EPSILON = 1e-5;
+    this.input = {
+      keys: []
+    };
+
+    this.EPSILON = 1e-5;
+  }
+
+  // Super lazy singleton.
+  Game.instance = null;
+
+  Game.prototype.tick = function() {
+    this.act();
+    this.draw();
+  };
+
+  Game.prototype.act = function() {
+    this._currTime = Date.now();
+    var delta = this._currTime - this._prevTime;
+    this._prevTime = this._currTime;
+
+    if ( delta > 1e2 ) {
+      delta = 1e2;
     }
 
-    // Super lazy singleton.
-    Game.instance = null;
+    this.getObjects().forEach(function( object ) {
+      object.act( delta );
+    });
+  };
 
-    Game.prototype.tick = function() {
-      this.act();
-      this.draw();
-    };
+  Game.prototype.draw = function() {
+    this._canvas.style.backgroundColor = this.getBackgroundColor().toHexString();
 
-    Game.prototype.act = function() {
-      this._currTime = Date.now();
-      var delta = this._currTime - this._prevTime;
-      this._prevTime = this._currTime;
+    var ctx = this._ctx;
 
-      if ( delta > 1e2 ) {
-        delta = 1e2;
-      }
+    ctx.clearRect( 0, 0, this.WIDTH, this.HEIGHT );
 
-      var objects = this.getObjects();
-      for ( var i = 0, n = objects.length; i < n; i++ ) {
-        objects[i].act( delta );
-      }
-    };
+    ctx.save();
+    // Origin is at bottom left corner in OpenGL.
+    ctx.translate( 0, this.HEIGHT );
+    ctx.scale( 1, -1 );
 
-    Game.prototype.draw = function() {
-      this._canvas.style.backgroundColor = this.getBackgroundColor().toHexString();
+    this.getObjects().forEach(function( object ) {
+      object.draw( ctx );
+    });
 
-      this._ctx.clearRect( 0, 0, this.WIDTH, this.HEIGHT );
+    ctx.restore();
+  };
 
-      this._ctx.save();
-      // Origin is at bottom left corner in OpenGL.
-      this._ctx.translate( 0, this.HEIGHT );
-      this._ctx.scale( 1, -1 );
+  Game.prototype.getObjects = function() {
+    return this._objects;
+  };
 
-      var objects = this.getObjects();
-      for ( var i = 0, n = objects.length; i < n; i++ ) {
-        objects[i].draw( this._ctx );
-      }
+  Game.prototype.addObject = function( object ) {
+    this.getObjects().push( object );
+    object.setParent( this );
+  };
 
-      this._ctx.restore();
-    };
+  Game.prototype.removeObject = function( object ) {
+    var objects = this.getObjects(),
+        index = objects.indexOf( object );
 
-    Game.prototype.getObjects = function() {
-      return this._objects;
-    };
+    if ( index !== -1 ) {
+      objects.splice( index, 1 )[0].setParent( null );
+    }
+  };
 
-    Game.prototype.addObject = function( object ) {
-      this.getObjects().push( object );
-      object.setParent( this );
-    };
+  // Background color.
+  Game.prototype.getBackgroundColor = function() {
+    return this._backgroundColor;
+  };
 
-    Game.prototype.removeObject = function( object ) {
-      var objects = this.getObjects();
-      var index = objects.indexOf( object );
-      if ( index !== -1 ) {
-        objects.splice( index, 1 )[0].setParent( null );
-      }
-    };
+  Game.prototype.setBackgroundColor = function() {
+    this.getBackgroundColor().set.apply( this.getBackgroundColor(), arguments );
+  };
 
-    // Background color.
-    Game.prototype.getBackgroundColor = function() {
-      return this._backgroundColor;
-    };
+  Game.prototype.isRunning = function() {
+    return this._running;
+  };
 
-    Game.prototype.setBackgroundColor = function() {
-      this.getBackgroundColor().set.apply( this.getBackgroundColor(), arguments );
-    };
+  Game.prototype.stop = function() {
+    this._running = false;
+  };
 
-    Game.prototype.isRunning = function() {
-      return this._running;
-    };
-
-    Game.prototype.stop = function() {
-      this._running = false;
-    };
-
-    return Game;
-  }
-);
+  return Game;
+});

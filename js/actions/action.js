@@ -1,11 +1,13 @@
 // Patterned after libgdx's Action classes (since we're eventually porting this
 // codebase anyway).
 define(function() {
+  'use strict';
+
   function Action() {
     this._object = null;
   }
 
-  Action.prototype.act = function( delta ) {};
+  Action.prototype.act = function() {};
 
   Action.prototype.restart = function() {};
 

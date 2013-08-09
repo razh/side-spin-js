@@ -1,68 +1,68 @@
-// From libgdx.
-define(
-  [ './action' ],
-  function( Action ) {
+define([
+  'actions/action'
+], function( Action ) {
+  'use strict';
 
-    function DelegateAction() {
-      Action.call( this );
+  // From libgdx.
+  function DelegateAction() {
+    Action.call( this );
 
-      this._action = null;
+    this._action = null;
+  }
+
+  DelegateAction.prototype = new Action();
+  DelegateAction.prototype.constructor = DelegateAction;
+
+  DelegateAction.prototype.getAction = function() {
+    return this._action;
+  };
+
+  DelegateAction.prototype.setAction = function( action ) {
+    this._action = action;
+    return this;
+  };
+
+  DelegateAction.prototype.restart = function() {
+    if ( this._action !== null ) {
+      this._action.restart();
+    }
+  };
+
+  DelegateAction.prototype.reset = function() {
+    Action.prototype.reset.call( this );
+    this.setAction( null );
+  };
+
+  DelegateAction.prototype.setObject = function( object ) {
+    if ( this._action !== null ) {
+      this._action.setObject( object );
     }
 
-    DelegateAction.prototype = new Action();
-    DelegateAction.prototype.constructor = DelegateAction;
+    return Action.prototype.setObject.call( this, object );
+  };
 
-    DelegateAction.prototype.getAction = function() {
-      return this._action;
-    };
+  DelegateAction.prototype.clone = function() {
+    return new DelegateAction().set( this );
+  };
 
-    DelegateAction.prototype.setAction = function( action ) {
-      this._action = action;
-      return this;
-    };
+  DelegateAction.prototype.set = function( action ) {
+    Action.prototype.set.call( this, action );
 
-    DelegateAction.prototype.restart = function() {
-      if ( this._action !== null ) {
-        this._action.restart();
-      }
-    };
+    if ( action.getAction() !== null ) {
+      this.setAction( action.getAction().clone() );
+    }
 
-    DelegateAction.prototype.reset = function() {
-      Action.prototype.reset.call( this );
-      this.setAction( null );
-    };
+    return this;
+  };
 
-    DelegateAction.prototype.setObject = function( object ) {
-      if ( this._action !== null ) {
-        this._action.setObject( object );
-      }
+  DelegateAction.prototype.equals = function( action ) {
+    if ( action instanceof DelegateAction ) {
+      return Action.prototype.equals( action ) &&
+             action.getAction().equals( this.getAction() );
+    }
 
-      return Action.prototype.setObject.call( this, object );
-    };
+    return false;
+  };
 
-    DelegateAction.prototype.clone = function() {
-      return new DelegateAction().set( this );
-    };
-
-    DelegateAction.prototype.set = function( action ) {
-      Action.prototype.set.call( this, action );
-
-      if ( action.getAction() !== null ) {
-        this.setAction( action.getAction().clone() );
-      }
-
-      return this;
-    };
-
-    DelegateAction.prototype.equals = function( action ) {
-      if ( action instanceof DelegateAction ) {
-        return Action.prototype.equals( action ) &&
-               action.getAction().equals( this.getAction() );
-      }
-
-      return false;
-    };
-
-    return DelegateAction;
-  }
-);
+  return DelegateAction;
+});

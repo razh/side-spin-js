@@ -1,47 +1,47 @@
-define(
-  [ './relative-temporal-action' ],
-  function( RelativeTemporalAction ) {
+define([
+  'actions/relative-temporal-action'
+], function( RelativeTemporalAction ) {
+  'use strict';
 
-    function LengthByAction() {
-      RelativeTemporalAction.call( this );
+  function LengthByAction() {
+    RelativeTemporalAction.call( this );
 
-      this._amount = 0.0;
+    this._amount = 0.0;
+  }
+
+  LengthByAction.prototype = new RelativeTemporalAction();
+  LengthByAction.prototype.constructor = LengthByAction;
+
+  LengthByAction.prototype.updateRelative = function( percentDelta ) {
+    this.getObject().lengthen( this._amount * percentDelta );
+  };
+
+  LengthByAction.prototype.getAmount = function() {
+    return this._amount;
+  };
+
+  LengthByAction.prototype.setAmount = function( lengthAmount ) {
+    this._amount = lengthAmount;
+    return this;
+  };
+
+  LengthByAction.prototype.clone = function() {
+    return new LengthByAction().set( this );
+  };
+
+  LengthByAction.prototype.set = function( action ) {
+    return RelativeTemporalAction.prototype.set.call( this, action )
+      .setAmount( action.getAmount() );
+  };
+
+  LengthByAction.prototype.equals = function( action ) {
+    if ( action instanceof LengthByAction ) {
+      return RelativeTemporalAction.prototype.equals.call( this, action ) &&
+             action.getAmount() === this.getAmount();
     }
 
-    LengthByAction.prototype = new RelativeTemporalAction();
-    LengthByAction.prototype.constructor = LengthByAction;
+    return false;
+  };
 
-    LengthByAction.prototype.updateRelative = function( percentDelta ) {
-      this.getObject().lengthen( this._amount * percentDelta );
-    };
-
-    LengthByAction.prototype.getAmount = function() {
-      return this._amount;
-    };
-
-    LengthByAction.prototype.setAmount = function( lengthAmount ) {
-      this._amount = lengthAmount;
-      return this;
-    };
-
-    LengthByAction.prototype.clone = function() {
-      return new LengthByAction().set( this );
-    };
-
-    LengthByAction.prototype.set = function( action ) {
-      return RelativeTemporalAction.prototype.set.call( this, action )
-        .setAmount( action.getAmount() );
-    };
-
-    LengthByAction.prototype.equals = function( action ) {
-      if ( action instanceof LengthByAction ) {
-        return RelativeTemporalAction.prototype.equals.call( this, action ) &&
-               action.getAmount() === this.getAmount();
-      }
-
-      return false;
-    };
-
-    return LengthByAction;
-  }
-);
+  return LengthByAction;
+});

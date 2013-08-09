@@ -1,24 +1,40 @@
-// From libgdx.
 define(function( require ) {
-  var Action           = require( './action'             ),
-      AlphaAction      = require( './alpha-action'       ),
-      AngleByAction    = require( './angle-by-action'    ),
-      AngleToAction    = require( './angle-to-action'    ),
-      ColorAction      = require( './color-action'       ),
-      DelayAction      = require( './delay-action'       ),
-      DistanceByAction = require( './distance-by-action' ),
-      DistanceToAction = require( './distance-to-action' ),
-      LengthByAction   = require( './length-by-action'   ),
-      LengthToAction   = require( './length-to-action'   ),
-      MoveByAction     = require( './move-by-action'     ),
-      MoveToAction     = require( './move-to-action'     ),
-      ParallelAction   = require( './parallel-action'    ),
-      RadiusByAction   = require( './radius-by-action'   ),
-      RadiusToAction   = require( './radius-to-action'   ),
-      RemoveAction     = require( './remove-action'      );
-      RepeatAction     = require( './repeat-action'      );
-      SequenceAction   = require( './sequence-action'    ),
-      VisibleAction    = require( './visible-action'     );
+  // From libgdx.
+  'use strict';
+
+  var Action           = require( 'actions/action'             ),
+      AlphaAction      = require( 'actions/alpha-action'       ),
+      AngleByAction    = require( 'actions/angle-by-action'    ),
+      AngleToAction    = require( 'actions/angle-to-action'    ),
+      ColorAction      = require( 'actions/color-action'       ),
+      DelayAction      = require( 'actions/delay-action'       ),
+      DistanceByAction = require( 'actions/distance-by-action' ),
+      DistanceToAction = require( 'actions/distance-to-action' ),
+      LengthByAction   = require( 'actions/length-by-action'   ),
+      LengthToAction   = require( 'actions/length-to-action'   ),
+      MoveByAction     = require( 'actions/move-by-action'     ),
+      MoveToAction     = require( 'actions/move-to-action'     ),
+      ParallelAction   = require( 'actions/parallel-action'    ),
+      RadiusByAction   = require( 'actions/radius-by-action'   ),
+      RadiusToAction   = require( 'actions/radius-to-action'   ),
+      RemoveAction     = require( 'actions/remove-action'      ),
+      RepeatAction     = require( 'actions/repeat-action'      ),
+      SequenceAction   = require( 'actions/sequence-action'    ),
+      VisibleAction    = require( 'actions/visible-action'     );
+
+  function alpha( newAlpha, duration, interpolation ) {
+    duration = duration || 0;
+    interpolation = interpolation || null;
+
+    return new AlphaAction()
+      .setAlpha( newAlpha )
+      .setDuration( duration )
+      .setInterpolation( interpolation );
+  }
+
+  function visible( visibility ) {
+    return new VisibleAction().setVisible( visibility );
+  }
 
   return {
     moveTo: function( x, y, duration, interpolation ) {
@@ -131,15 +147,7 @@ define(function( require ) {
         .setInterpolation( interpolation );
     },
 
-    alpha: function( alpha, duration, interpolation ) {
-      duration = duration || 0;
-      interpolation = interpolation || null;
-
-      return new AlphaAction()
-        .setAlpha( alpha )
-        .setDuration( duration )
-        .setInterpolation( interpolation );
-    },
+    alpha: alpha,
 
     fadeOut: function( duration, interpolation ) {
       return alpha( 0, duration, interpolation );
@@ -157,9 +165,7 @@ define(function( require ) {
       return visible( false );
     },
 
-    visible: function( visible ) {
-      return new VisibleAction().setVisible( visible );
-    },
+    visible: visible,
 
     remove: function( removeObject ) {
       removeObject = removeObject || null;

@@ -1,89 +1,89 @@
-// From libgdx.
-define(
-  [ './temporal-action',
-    '../color' ],
-  function( TemporalAction, Color ) {
+define([
+  'actions/temporal-action',
+  'color'
+], function( TemporalAction, Color ) {
+  'use strict';
 
-    function ColorAction() {
-      TemporalAction.call( this );
+  // From libgdx.
+  function ColorAction() {
+    TemporalAction.call( this );
 
-      this._startR = 0;
-      this._startG = 0;
-      this._startB = 0;
-      this._startA = 0.0;
+    this._startR = 0;
+    this._startG = 0;
+    this._startB = 0;
+    this._startA = 0.0;
 
-      this._color = null;
-      this._endColor = new Color();
+    this._color = null;
+    this._endColor = new Color();
+  }
+
+  ColorAction.prototype = new TemporalAction();
+  ColorAction.prototype.constructor = ColorAction;
+
+  ColorAction.prototype.begin = function() {
+    if ( this._color === null ) {
+      this._color = this.getObject().getColor();
     }
 
-    ColorAction.prototype = new TemporalAction();
-    ColorAction.prototype.constructor = ColorAction;
+    this._startR = this._color.getRed();
+    this._startG = this._color.getGreen();
+    this._startB = this._color.getBlue();
+    this._startA = this._color.getAlpha();
+  };
 
-    ColorAction.prototype.begin = function() {
-      if ( this._color === null ) {
-        this._color = this.getObject().getColor();
-      }
+  ColorAction.prototype.update = function( percent ) {
+    var endColor = this.getEndColor();
 
-      this._startR = this._color.getRed();
-      this._startG = this._color.getGreen();
-      this._startB = this._color.getBlue();
-      this._startA = this._color.getAlpha();
-    };
+    var r = this._startR + ( endColor.getRed()   - this._startR ) * percent,
+        g = this._startG + ( endColor.getGreen() - this._startG ) * percent,
+        b = this._startB + ( endColor.getBlue()  - this._startB ) * percent,
+        a = this._startA + ( endColor.getAlpha() - this._startA ) * percent;
 
-    ColorAction.prototype.update = function( percent ) {
-      var endColor = this.getEndColor();
+    this._color.set( r, g, b, a );
+  };
 
-      var r = this._startR + ( endColor.getRed()   - this._startR ) * percent,
-          g = this._startG + ( endColor.getGreen() - this._startG ) * percent,
-          b = this._startB + ( endColor.getBlue()  - this._startB ) * percent,
-          a = this._startA + ( endColor.getAlpha() - this._startA ) * percent;
+  ColorAction.prototype.reset = function() {
+    TemporalAction.prototype.reset.call( this );
+    this._color = null;
+  };
 
-      this._color.set( r, g, b, a );
-    };
+  // Color.
+  ColorAction.prototype.getColor = function() {
+    return this._color;
+  };
 
-    ColorAction.prototype.reset = function() {
-      TemporalAction.prototype.reset.call( this );
-      this._color = null;
-    };
+  ColorAction.prototype.setColor = function( color ) {
+    this._color = color;
+    return this;
+  };
 
-    // Color.
-    ColorAction.prototype.getColor = function() {
-      return this._color;
-    };
+  // End color.
+  ColorAction.prototype.getEndColor = function() {
+    return this._endColor;
+  };
 
-    ColorAction.prototype.setColor = function( color ) {
-      this._color = color;
-      return this;
-    };
+  ColorAction.prototype.setEndColor = function() {
+    this.getEndColor().set.apply( this.getEndColor(), arguments );
+    return this;
+  };
 
-    // End color.
-    ColorAction.prototype.getEndColor = function() {
-      return this._endColor;
-    };
+  ColorAction.prototype.clone = function() {
+    return new ColorAction().set( this );
+  };
 
-    ColorAction.prototype.setEndColor = function() {
-      this.getEndColor().set.apply( this.getEndColor(), arguments );
-      return this;
-    };
+  ColorAction.prototype.set = function( action ) {
+    return TemporalAction.prototype.set.call( this, action )
+      .setEndColor( action.getEndColor() );
+  };
 
-    ColorAction.prototype.clone = function() {
-      return new ColorAction().set( this );
-    };
+  ColorAction.prototype.equals = function( action ) {
+    if ( action instanceof ColorAction ) {
+      return TemporalAction.prototype.equals.call( this, action ) &&
+             action.getEndColor() === this.getEndColor();
+    }
 
-    ColorAction.prototype.set = function( action ) {
-      return TemporalAction.prototype.set.call( this, action )
-        .setEndColor( action.getEndColor() );
-    };
+    return false;
+  };
 
-    ColorAction.prototype.equals = function( action ) {
-      if ( action instanceof ColorAction ) {
-        return TemporalAction.prototype.equals.call( this, action ) &&
-               action.getEndColor() === this.getEndColor();
-      }
-
-      return false;
-    };
-
-    return ColorAction;
-  }
-);
+  return ColorAction;
+});

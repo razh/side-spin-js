@@ -1,63 +1,63 @@
-// Analogous to RemoveActorAction in libgdx.
-define(
-  [ './action' ],
-  function( Action ) {
+define([
+  'actions/action'
+], function( Action ) {
+  'use strict';
 
-    function RemoveAction() {
-      Action.call( this );
+  // Analogous to RemoveActorAction in libgdx.
+  function RemoveAction() {
+    Action.call( this );
 
-      this._removeObject = null;
-      this._removed = false;
+    this._removeObject = null;
+    this._removed = false;
+  }
+
+  RemoveAction.prototype = new Action();
+  RemoveAction.prototype.constructor = RemoveAction;
+
+  RemoveAction.prototype.act = function() {
+    if ( !this._removed ) {
+      this._removed = true;
+      ( this._removeObject !== null ? this._removeObject : this.getObject() ).remove();
     }
 
-    RemoveAction.prototype = new Action();
-    RemoveAction.prototype.constructor = RemoveAction;
+    return true;
+  };
 
-    RemoveAction.prototype.act = function( delta ) {
-      if ( !this._removed ) {
-        this._removed = true;
-        ( this._removeObject !== null ? this._removeObject : this.getObject() ).remove();
-      }
+  RemoveAction.prototype.restart = function() {
+    this._removed = false;
+  };
 
-      return true;
-    };
+  RemoveAction.prototype.reset = function() {
+    Action.prototype.reset.call( this );
+    this._removeObject = null;
+  };
 
-    RemoveAction.prototype.restart = function() {
-      this._removed = false;
-    };
+  RemoveAction.prototype.getRemoveObject = function() {
+    return this._removeObject;
+  };
 
-    RemoveAction.prototype.reset = function() {
-      Action.prototype.reset.call( this );
-      this._removeObject = null;
-    };
+  RemoveAction.prototype.setRemoveObject = function( removeObject ) {
+    this._removeObject = removeObject;
+    return this;
+  };
 
-    RemoveAction.prototype.getRemoveObject = function() {
-      return this._removeObject;
-    };
+  RemoveAction.prototype.clone = function() {
+    return new RemoveAction().set( this );
+  };
 
-    RemoveAction.prototype.setRemoveObject = function( removeObject ) {
-      this._removeObject = removeObject;
-      return this;
-    };
+  RemoveAction.prototype.set = function( action ) {
+    return Action.prototype.set.call( this, action )
+      .setRemoveObject( action.getRemoveObject() );
+  };
 
-    RemoveAction.prototype.clone = function() {
-      return new RemoveAction().set( this );
-    };
+  RemoveAction.prototype.equals = function( action ) {
+    if ( action instanceof RemoveAction ) {
+      return Action.prototype.equals.call( this, action ) &&
+             action.getRemoveObject() === this.getRemoveObject();
+    }
 
-    RemoveAction.prototype.set = function( action ) {
-      return Action.prototype.set.call( this, action )
-        .setRemoveObject( action.getRemoveObject() );
-    };
+    return false;
+  };
 
-    RemoveAction.prototype.equals = function( action ) {
-      if ( action instanceof RemoveAction ) {
-        return Action.prototype.equals.call( this, action ) &&
-               action.getRemoveObject() === this.getRemoveObject();
-      }
-
-      return false;
-    };
-
-    return RemoveAction;
-  }
-);
+  return RemoveAction;
+});

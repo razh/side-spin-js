@@ -1,141 +1,140 @@
-// From libgdx.
-define(
-  [ './action' ],
-  function( Action ) {
-    // TemporalAction
-    // --------------
-    function TemporalAction() {
-      Action.call( this );
+define([
+  'actions/action'
+], function( Action ) {
+  'use strict';
 
-      this._duration = 0.0;
-      // Transition time so far.
-      this._time = 0.0;
+  // From libgdx.
+  function TemporalAction() {
+    Action.call( this );
 
-      this._interpolation = null;
+    this._duration = 0.0;
+    // Transition time so far.
+    this._time     = 0.0;
 
-      this._reverse = false;
-      this._complete = false;
+    this._interpolation = null;
+
+    this._reverse  = false;
+    this._complete = false;
+  }
+
+  TemporalAction.prototype = new Action();
+  TemporalAction.prototype.constructor = TemporalAction;
+
+  TemporalAction.prototype.act = function( delta ) {
+    if ( this._complete ) {
+      return true;
     }
 
-    TemporalAction.prototype = new Action();
-    TemporalAction.prototype.constructor = TemporalAction;
+    if ( this._time === 0 ) {
+      this.begin();
+    }
 
-    TemporalAction.prototype.act = function( delta ) {
-      if ( this._complete ) {
-        return true;
+    this._time += delta;
+    this._complete = this._time >= this._duration;
+
+    var percent;
+
+    if ( this._complete ) {
+      percent = 1;
+    } else {
+      percent = this._time / this._duration;
+      if ( this._interpolation !== null ) {
+        percent = this._interpolation.call( this, percent );
       }
+    }
 
-      if ( this._time === 0 ) {
-        this.begin();
-      }
+    this.update( this._reverse ? 1 - percent : percent );
+    if ( this._complete ) {
+      this.end();
+    }
 
-      this._time += delta;
-      this._complete = this._time >= this._duration;
+    return this._complete;
+  };
 
-      var percent;
+  // Code to be executed before the beginning of transition.
+  TemporalAction.prototype.begin = function() {};
 
-      if ( this._complete ) {
-        percent = 1;
-      } else {
-        percent = this._time / this._duration;
-        if ( this._interpolation !== null ) {
-          percent = this._interpolation.call( this, percent );
-        }
-      }
+  TemporalAction.prototype.end = function() {};
 
-      this.update( this._reverse ? 1 - percent : percent );
-      if ( this._complete ) {
-        this.end();
-      }
+  // Called every frame,
+  TemporalAction.prototype.update = function( percent ) {};
 
-      return this._complete;
-    };
+  TemporalAction.prototype.finish = function() {
+    this._time = this._duration;
+  };
 
-    // Code to be executed before the beginning of transition.
-    TemporalAction.prototype.begin = function() {};
+  TemporalAction.prototype.restart = function() {
+    this._time = 0;
+    this._complete = false;
+  };
 
-    TemporalAction.prototype.end = function() {};
+  TemporalAction.prototype.reset = function() {
+    Action.prototype.reset.call( this );
+    this._reverse = false;
+    this._interpolation = null;
+  };
 
-    // Called every frame,
-    TemporalAction.prototype.update = function( percent ) {};
+  // Duration.
+  TemporalAction.prototype.getDuration = function() {
+    return this._duration;
+  };
 
-    TemporalAction.prototype.finish = function() {
-      this._time = this._duration;
-    };
+  TemporalAction.prototype.setDuration = function( duration ) {
+    this._duration = duration;
+    return this;
+  };
 
-    TemporalAction.prototype.restart = function() {
-      this._time = 0;
-      this._complete = false;
-    };
+  // Time.
+  TemporalAction.prototype.getTime = function() {
+    return this._time;
+  };
 
-    TemporalAction.prototype.reset = function() {
-      Action.prototype.reset.call( this );
-      this._reverse = false;
-      this._interpolation = null;
-    };
+  TemporalAction.prototype.setTime = function( time ) {
+    this._time = time;
+    return this;
+  };
 
-    // Duration.
-    TemporalAction.prototype.getDuration = function() {
-      return this._duration;
-    };
+  // Interpolation.
+  TemporalAction.prototype.getInterpolation = function() {
+    return this._interpolation;
+  };
 
-    TemporalAction.prototype.setDuration = function( duration ) {
-      this._duration = duration;
-      return this;
-    };
+  TemporalAction.prototype.setInterpolation = function( interpolation ) {
+    this._interpolation = interpolation;
+    return this;
+  };
 
-    // Time.
-    TemporalAction.prototype.getTime = function() {
-      return this._time;
-    };
+  // Reverse.
+  TemporalAction.prototype.isReverse = function() {
+    return this._reverse;
+  };
 
-    TemporalAction.prototype.setTime = function( time ) {
-      this._time = time;
-      return this;
-    };
+  TemporalAction.prototype.setReverse = function( reverse ) {
+    this._reverse = reverse;
+    return this;
+  };
 
-    // Interpolation.
-    TemporalAction.prototype.getInterpolation = function() {
-      return this._interpolation;
-    };
+  TemporalAction.prototype.clone = function() {
+    return new TemporalAction().set( this );
+  };
 
-    TemporalAction.prototype.setInterpolation = function( interpolation ) {
-      this._interpolation = interpolation;
-      return this;
-    };
+  TemporalAction.prototype.set = function( action ) {
+    return Action.prototype.set.call( this, action )
+      .setDuration( action.getDuration() )
+      .setInterpolation( action.getInterpolation() )
+      .setReverse( action.isReverse() );
+  };
 
-    // Reverse.
-    TemporalAction.prototype.isReverse = function() {
-      return this._reverse;
-    };
+  TemporalAction.prototype.equals = function( action ) {
+    if ( action instanceof TemporalAction ) {
+      return Action.prototype.equals.call( this, action )          &&
+             action.getDuration()      === this.getDuration()      &&
+             action.getInterpolation() === this.getInterpolation() &&
+             action.isReverse()        === this.isReverse();
+    }
 
-    TemporalAction.prototype.setReverse = function( reverse ) {
-      this._reverse = reverse;
-      return this;
-    };
+    return false;
+  };
 
-    TemporalAction.prototype.clone = function() {
-      return new TemporalAction().set( this );
-    };
-
-    TemporalAction.prototype.set = function( action ) {
-      return Action.prototype.set.call( this, action )
-        .setDuration( action.getDuration() )
-        .setInterpolation( action.getInterpolation() )
-        .setReverse( action.isReverse() );
-    };
-
-    TemporalAction.prototype.equals = function( action ) {
-      if ( action instanceof TemporalAction ) {
-        return Action.prototype.equals.call( this, action )          &&
-               action.getDuration()      === this.getDuration()      &&
-               action.getInterpolation() === this.getInterpolation() &&
-               action.isReverse()        === this.isReverse();
-      }
-
-      return false;
-    };
-
-    return TemporalAction;
-  }
-);
+  return TemporalAction;
+});

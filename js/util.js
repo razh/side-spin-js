@@ -1,35 +1,35 @@
-define(
-  function() {
-    window.requestAnimFrame = (function() {
-      return window.requestAnimationFrame       ||
-             window.webkitRequestAnimationFrame ||
-             window.mozRequestAnimationFrame    ||
-             window.oRequestAnimationFrame      ||
-             window.msRequestAnimationFrame     ||
-             function( callback ) {
-                window.setTimeout( callback, 1000 / 60 );
-             };
-    }) ();
+define(function() {
+  'use strict';
 
-    var Util = {};
+  window.requestAnimFrame = (function() {
+    return window.requestAnimationFrame       ||
+           window.webkitRequestAnimationFrame ||
+           window.mozRequestAnimationFrame    ||
+           window.oRequestAnimationFrame      ||
+           window.msRequestAnimationFrame     ||
+           function( callback ) {
+              window.setTimeout( callback, 1000 / 60 );
+           };
+  }) ();
 
-    Util.clamp = function( value, min, max ) {
-      // Swap if the order is wrong.
-      if ( max < min ) {
-        var temp = min;
-        min = max;
-        max = temp;
-      }
+  var Util = {};
 
-      if ( value < min ) {
-        value = min;
-      } else if ( value > max ) {
-        value = max;
-      }
+  Util.clamp = function( value, min, max ) {
+    // Swap if the order is wrong.
+    if ( max < min ) {
+      var temp = min;
+      min = max;
+      max = temp;
+    }
 
-      return value;
-    };
+    if ( value < min ) {
+      value = min;
+    } else if ( value > max ) {
+      value = max;
+    }
 
-    return Util;
-  }
-);
+    return value;
+  };
+
+  return Util;
+});

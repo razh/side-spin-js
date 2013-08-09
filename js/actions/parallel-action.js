@@ -1,107 +1,105 @@
-// From libgdx.
-define(
-  [ './action' ],
-  function( Action ) {
+define([
+  'actions/action'
+], function( Action ) {
+  'use strict';
 
-    function ParallelAction() {
-      Action.call( this );
+  // From libgdx.
+  function ParallelAction() {
+    Action.call( this );
 
-      this._actions = [];
-      this._complete = false;
+    this._actions  = [];
+    this._complete = false;
+  }
+
+  ParallelAction.prototype = new Action();
+  ParallelAction.prototype.constructor = ParallelAction;
+
+  ParallelAction.prototype.act = function( delta ) {
+    if ( this._complete ) {
+      return true;
     }
 
-    ParallelAction.prototype = new Action();
-    ParallelAction.prototype.constructor = ParallelAction;
+    this._complete = true;
 
-    ParallelAction.prototype.act = function( delta ) {
-      if ( this._complete ) {
-        return true;
+    var actions = this.getActions();
+    for ( var i = 0, n = actions.length; i < n; i++ ) {
+      if ( !actions[i].act( delta ) ) {
+        this._complete = false;
       }
+    }
 
-      this._complete = true;
+    return this._complete;
+  };
 
-      var actions = this.getActions();
-      for ( var i = 0, n = actions.length; i < n; i++ ) {
-        if ( !actions[i].act( delta ) ) {
-          this._complete = false;
-        }
-      }
+  ParallelAction.prototype.restart = function() {
+    this._complete = false;
 
-      return this._complete;
-    };
+    this.getActions().forEach(function( action ) {
+      action.restart();
+    });
+  };
 
-    ParallelAction.prototype.restart = function() {
-      this._complete = false;
+  ParallelAction.prototype.reset = function() {
+    Action.prototype.reset.call( this );
+    this._actions = [];
+  };
 
-      var actions = this.getActions();
-      for ( var i = 0, n = actions.length; i < n; i++ ) {
-        actions[i].restart();
-      }
-    };
+  ParallelAction.prototype.addAction = function( action ) {
+    this._actions.push( action );
 
-    ParallelAction.prototype.reset = function() {
-      Action.prototype.reset.call( this );
-      this._actions = [];
-    };
+    var object = this.getObject();
+    if ( object !== null ) {
+      action.setObject( object );
+    }
+  };
 
-    ParallelAction.prototype.addAction = function( action ) {
-      this._actions.push( action );
+  ParallelAction.prototype.setObject = function( object ) {
+    this.getActions().forEach(function( action ) {
+      action.setObject( object );
+    });
 
-      var object = this.getObject();
-      if ( object !== null ) {
-        action.setObject( object );
-      }
-    };
+    Action.prototype.setObject.call( this, object );
+  };
 
-    ParallelAction.prototype.setObject = function( object ) {
-      var actions = this.getActions();
-      for ( var i = 0, n = actions.length; i < n; i++ ) {
-        actions[i].setObject( object );
-      }
+  ParallelAction.prototype.getActions = function() {
+    return this._actions;
+  };
 
-      Action.prototype.setObject.call( this, object );
-    };
+  ParallelAction.prototype.clone = function() {
+    return new ParallelAction().set( this );
+  };
 
-    ParallelAction.prototype.getActions = function() {
-      return this._actions;
-    };
+  ParallelAction.prototype.set = function( action ) {
+    Action.prototype.set.call( this, action );
 
-    ParallelAction.prototype.clone = function() {
-      return new ParallelAction().set( this );
-    };
+    var actions = action.getActions();
+    for ( var i = 0, n = actions.length; i < n; i++ ) {
+      this.addAction( actions[i].clone() );
+    }
 
-    ParallelAction.prototype.set = function( action ) {
-      Action.prototype.set.call( this, action );
+    return this;
+  };
 
-      var actions = action.getActions();
-      for ( var i = 0, n = actions.length; i < n; i++ ) {
-        this.addAction( actions[i].clone() );
-      }
+  ParallelAction.prototype.equals = function( action ) {
+    if ( !( action instanceof ParallelAction ) ) {
+      return false;
+    }
 
-      return this;
-    };
+    var actions = this.getActions(),
+        otherActions = actions.getActions();
 
-    ParallelAction.prototype.equals = function( action ) {
-      if ( !( action instanceof ParallelAction ) ) {
+    if ( actions.length !== otherActions.length ) {
+      return false;
+    }
+
+    for ( var i = 0, n = actions.length; i < n; i++ ) {
+      if ( !actions[i].equals( otherActions[i] ) ) {
         return false;
       }
+    }
 
-      var actions = this.getActions(),
-          otherActions = actions.getActions();
+    return Action.prototype.equals.call( this, action );
+  };
 
-      if ( actions.length !== otherActions.length ) {
-        return false;
-      }
-
-      for ( var i = 0, n = actions.length; i < n; i++ ) {
-        if ( !actions[i].equals( otherActions[i] ) ) {
-          return false;
-        }
-      }
-
-      return Action.prototype.equals.call( this, action );
-    };
-
-    return ParallelAction;
-  }
-);
+  return ParallelAction;
+});
