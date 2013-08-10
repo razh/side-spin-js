@@ -75,7 +75,7 @@ define([
       color( new Color( 255, 0, 0, 1.0 ), 2000, Interpolation.expo10 )
     );
 
-    this._outerEntity.getChildren().forEach(function( child ) {
+    this._innerEntity.getChildren().forEach(function( child ) {
       increase = Math.random() * 40 + 10;
       decrease = -increase;
 
